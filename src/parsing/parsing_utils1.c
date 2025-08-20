@@ -71,9 +71,11 @@ void	init_tokens(t_cmds *cmds, int token_size, t_cmds *lst)
 			token1(cmds, '>');
 		else if (token_size == 1 && cmds->cmd[0][0] == '|')
 			token1(cmds, '|');
-		else if (token_size == 2 && cmds->cmd[0][0] == '>' && cmds->cmd[0][1] == '>')
+		else if (token_size == 2 && cmds->cmd[0][0] == '>'
+				&& cmds->cmd[0][1] == '>')
 			token2(cmds, 1);
-		else if (token_size == 2 && cmds->cmd[0][0] == '<' && cmds->cmd[0][1] == '<')
+		else if (token_size == 2 && cmds->cmd[0][0] == '<'
+				&& cmds->cmd[0][1] == '<')
 			token2(cmds, 2);
 		else if (!cmds->prev && !cmds->next)
 			cmds->token = Cmd;

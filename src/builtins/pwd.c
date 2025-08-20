@@ -88,7 +88,8 @@ t_env	*unset_env(t_env *list, char **command_args, t_data *data)
 	{
 		if (is_it_inside(command_args[i]) == false)
 		{
-			if (data->path_flag == true && ft_strcmp(command_args[i], "PATH") == 0)
+			if (data->path_flag == true && ft_strcmp(command_args[i],
+					"PATH") == 0)
 				data->path_flag = false;
 			env_node = find_env_variable(list, command_args[i]);
 			if (env_node)

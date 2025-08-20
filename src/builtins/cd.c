@@ -44,7 +44,8 @@ void	set_env_after_cd(t_env *list, char *key, char *value)
 	char	*tmp;
 
 	env_node = find_env_variable(list, key);
-	if (env_node && (ft_strcmp(key, "OLDPWD") == 0 || ft_strcmp(key, "PWD") == 0))
+	if (env_node && (ft_strcmp(key, "OLDPWD") == 0 || ft_strcmp(key,
+				"PWD") == 0))
 	{
 		free(env_node->var_name);
 		env_node->var_name = ft_strjoin(key, "=");
@@ -81,7 +82,8 @@ void	change_directory_path(t_env *list, char *path)
 	}
 }
 
-char	*find_variable_value(t_env *list, t_env *head, char *variable_name, bool flag)
+char	*find_variable_value(t_env *list, t_env *head, char *variable_name,
+		bool flag)
 {
 	char	**value_parts;
 

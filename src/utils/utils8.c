@@ -29,7 +29,8 @@ bool	check_next_for_both(char *str)
 			single_quote_count++;
 		i++;
 	}
-	if ((double_quote_count != 0 && double_quote_count % 2 == 0) || (single_quote_count != 0 && single_quote_count % 2 == 0))
+	if ((double_quote_count != 0 && double_quote_count % 2 == 0)
+		|| (single_quote_count != 0 && single_quote_count % 2 == 0))
 		return (true);
 	if (double_quote_count == 0 && single_quote_count == 0)
 		return (true);

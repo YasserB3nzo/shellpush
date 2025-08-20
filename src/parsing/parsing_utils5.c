@@ -32,7 +32,7 @@ size_t	get_size(char *str)
 			k += 2;
 		}
 		else if ((str[i] == 39 && str[i + 1] == 39) || (str[i] == 34 && str[i
-				+ 1] == 34))
+					+ 1] == 34))
 			i++;
 		i++;
 	}
@@ -48,7 +48,7 @@ char	*get_string(char *s, size_t i, size_t k, size_t size)
 	while (k < size)
 	{
 		while ((s[i] == 39 && s[i + 1] && s[i + 1] != 39) || (s[i] == 34 && s[i
-				+ 1] && s[i + 1] != 34))
+					+ 1] && s[i + 1] != 34))
 		{
 			tmp = s[i++];
 			while (s[i] && s[i + 1] && s[i] != tmp)

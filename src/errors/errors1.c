@@ -17,7 +17,8 @@ void	set_env_if_plus(t_env *env_node, char *export_value)
 	char	*original_var;
 
 	original_var = env_node->var_name;
-	if (original_var[ft_strlen(original_var) - 1] != '=' && check_eq(original_var) == true)
+	if (original_var[ft_strlen(original_var) - 1] != '='
+		&& check_eq(original_var) == true)
 		env_node->var_name = ft_strjoin3(original_var, '=', export_value);
 	else
 		env_node->var_name = ft_strjoin(original_var, export_value);
