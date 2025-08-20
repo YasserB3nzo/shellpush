@@ -21,40 +21,40 @@ SRCS = 	Libft/ft_split.c\
 		Libft/ft_strchr.c\
 		Libft/ft_itoa.c\
 		Libft/ft_atoi.c\
-		src/minishell.c\
-		src/parsing.c\
-		src/parsing_utils1.c\
-		src/parsing_utils2.c\
-		src/parsing_utils3.c\
-		src/parsing_utils4.c\
-		src/parsing_utils5.c\
-		src/parsing_utils6.c\
-		src/parsing_utils7.c\
-		src/parsing_utils8.c\
-		src/handlingsignals.c\
-		src/utils0.c\
-		src/utils1.c\
-		src/utils2.c\
-		src/utils3.c\
-		src/utils4.c\
-		src/utils5.c\
-		src/utils6.c\
-		src/utils7.c\
-		src/utils8.c\
-		src/utils9.c\
-		src/cd.c\
-		src/lst.c\
-		src/tmp.c\
-		src/env.c\
-		src/pwd.c\
-		src/echo.c\
-		src/export.c\
-		src/errors0.c\
-		src/errors1.c\
-		src/executing.c\
-		src/unset_exit.c\
-		src/open_heredoc.c\
-		src/expand_variable.c
+		src/core/minishell.c\
+		src/parsing/parsing.c\
+		src/parsing/parsing_utils1.c\
+		src/parsing/parsing_utils2.c\
+		src/parsing/parsing_utils3.c\
+		src/parsing/parsing_utils4.c\
+		src/parsing/parsing_utils5.c\
+		src/parsing/parsing_utils6.c\
+		src/parsing/parsing_utils7.c\
+		src/parsing/parsing_utils8.c\
+		src/parsing/expand_variable.c\
+		src/parsing/open_heredoc.c\
+		src/execution/executing.c\
+		src/execution/handlingsignals.c\
+		src/builtins/cd.c\
+		src/builtins/echo.c\
+		src/builtins/env.c\
+		src/builtins/export.c\
+		src/builtins/pwd.c\
+		src/builtins/unset_exit.c\
+		src/utils/lst.c\
+		src/utils/tmp.c\
+		src/utils/utils0.c\
+		src/utils/utils1.c\
+		src/utils/utils2.c\
+		src/utils/utils3.c\
+		src/utils/utils4.c\
+		src/utils/utils5.c\
+		src/utils/utils6.c\
+		src/utils/utils7.c\
+		src/utils/utils8.c\
+		src/utils/utils9.c\
+		src/errors/errors0.c\
+		src/errors/errors1.c
 
 OBJ = $(SRCS:.c=.o)
 
