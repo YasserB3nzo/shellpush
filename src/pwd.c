@@ -12,45 +12,45 @@
 
 #include "../include/minishell.h"
 
-void	my_cd(t_env *list, char **com)
+void	change_directory(t_env *env_list, char **command_args)
 {
-	char	*myhome;
-	int		counter;
+	char	*home_path;
+	int		arg_count;
 
-	counter = morethan2arg(com);
-	if (counter > 2)
+	arg_count = morethan2arg(command_args);
+	if (arg_count > 2)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
 		return ;
 	}
-	myhome = findmyvar(list, list, "HOME", false);
-	if (com[1] == NULL || com[1][0] == '~')
+	home_path = find_variable_value(env_list, env_list, "HOME", false);
+	if (command_args[1] == NULL || command_args[1][0] == '~')
 	{
-		if (!myhome)
+		if (!home_path)
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 		else
-			change_mydir(list, myhome);
+			change_directory_path(env_list, home_path);
 	}
 	else
-		change_mydir(list, com[1]);
+		change_directory_path(env_list, command_args[1]);
 }
 
-void	mypwd(t_env *env)
+void	print_working_directory(t_env *env_list)
 {
 	char	buffer[PATH_MAX];
-	char	*cur;
-	char	*str;
+	char	*current_path;
+	char	*pwd_value;
 
-	cur = getcwd(buffer, PATH_MAX);
-	if (cur)
+	current_path = getcwd(buffer, PATH_MAX);
+	if (current_path)
 	{
-		ft_putstr_fd(cur, 1);
+		ft_putstr_fd(current_path, 1);
 		ft_putchar_fd('\n', 1);
 	}
 	else
 	{
-		str = findmyvar(env, env, "PWD", false);
-		ft_putstr_fd(str, 1);
+		pwd_value = find_variable_value(env_list, env_list, "PWD", false);
+		ft_putstr_fd(pwd_value, 1);
 		ft_putchar_fd('\n', 1);
 	}
 }
@@ -77,22 +77,22 @@ t_env	*remove_node(t_env *head, t_env *node_to_remove)
 	return (head);
 }
 
-t_env	*unset_env(t_env *list, char **com, t_data *data)
+t_env	*unset_env(t_env *list, char **command_args, t_data *data)
 {
-	t_env	*index;
+	t_env	*env_node;
 	int		i;
 
 	i = 0;
-	index = NULL;
-	while (com[i])
+	env_node = NULL;
+	while (command_args[i])
 	{
-		if (is_it_inside(com[i]) == false)
+		if (is_it_inside(command_args[i]) == false)
 		{
-			if (data->path_flag == true && ft_strcmp(com[i], "PATH") == 0)
+			if (data->path_flag == true && ft_strcmp(command_args[i], "PATH") == 0)
 				data->path_flag = false;
-			index = findmyindex(list, com[i]);
-			if (index)
-				list = remove_node(list, index);
+			env_node = find_env_variable(list, command_args[i]);
+			if (env_node)
+				list = remove_node(list, env_node);
 		}
 		i++;
 	}

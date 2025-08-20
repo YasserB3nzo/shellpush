@@ -12,16 +12,16 @@
 
 #include "../include/minishell.h"
 
-void	set_env_if_plus(t_env *index, char *export)
+void	set_env_if_plus(t_env *env_node, char *export_value)
 {
-	char	*tmp;
+	char	*original_var;
 
-	tmp = index->var_name;
-	if (tmp[ft_strlen(tmp) - 1] != '=' && check_eq(tmp) == true)
-		index->var_name = ft_strjoin3(tmp, '=', export);
+	original_var = env_node->var_name;
+	if (original_var[ft_strlen(original_var) - 1] != '=' && check_eq(original_var) == true)
+		env_node->var_name = ft_strjoin3(original_var, '=', export_value);
 	else
-		index->var_name = ft_strjoin(tmp, export);
-	free(tmp);
+		env_node->var_name = ft_strjoin(original_var, export_value);
+	free(original_var);
 }
 
 int	ft_strcmp_for_heredoc(char *s1, char *s2)

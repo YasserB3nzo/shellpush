@@ -12,80 +12,80 @@
 
 #include "../include/minishell.h"
 
-void	exit_from_child(char **com)
+void	exit_from_child(char **command_args)
 {
 	int	i;
 
-	if (com[1] == NULL)
+	if (command_args[1] == NULL)
 		exit(g_signal.ret_exit);
-	else if (is_numeric(com[1]) != 0)
+	else if (is_numeric(command_args[1]) != 0)
 		exit(2);
-	else if (com[1] && com[2])
+	else if (command_args[1] && command_args[2])
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 	else
 	{
-		i = ft_atoi(com[1]);
+		i = ft_atoi(command_args[1]);
 		g_signal.ret = i;
 		exit(i);
 	}
 }
 
-void	exit_myminishell(char **com, int flag)
+void	exit_myminishell(char **command_args, int flag)
 {
 	int	i;
 
 	if (flag != 0)
-		exit_from_child(com);
-	else if (com[1] == NULL)
+		exit_from_child(command_args);
+	else if (command_args[1] == NULL)
 	{
 		printf("exit\n");
 		exit(g_signal.ret_exit);
 	}
-	else if (is_numeric(com[1]) != 0)
+	else if (is_numeric(command_args[1]) != 0)
 	{
 		printf("minishell: ");
-		printf(com[1], 2);
+		printf(command_args[1], 2);
 		printf(": numeric argument required\n");
 		exit(2);
 	}
-	else if (com[1] && com[2])
+	else if (command_args[1] && command_args[2])
 		printf("minishell: exit: too many arguments\n");
 	else
 	{
-		i = ft_atoi(com[1]);
+		i = ft_atoi(command_args[1]);
 		printf("exit\n");
 		g_signal.ret = i;
 		exit(i);
 	}
 }
 
-char	*get_my_path(t_env *list, char **com, bool flag, int i)
+char	*get_my_path(t_env *list, char **command_args, bool flag, int i)
 {
-	char	**str;
-	char	*path1;
-	char	*mypath;
+	char	**path_array;
+	char	*path_value;
+	char	*search_path;
 	char	*command_path;
 
-	mypath = NULL;
-	if (com[0][0] == '/' || com[0][0] == '.')
-		return (ft_strdup(com[0]));
-	path1 = findmyvar(list, list, "PATH", flag);
-	if (!path1)
+	search_path = NULL;
+	if (command_args[0][0] == '/' || command_args[0][0] == '.')
+		return (ft_strdup(command_args[0]));
+	path_value = find_variable_value(list, list, "PATH", flag);
+	if (!path_value)
 		return (NULL);
-	str = ft_split(path1, ':');
-	while (str[i])
+	path_array = ft_split(path_value, ':');
+	while (path_array[i])
 	{
-		command_path = ft_strjoin3(str[i], '/', com[0]);
+		command_path = ft_strjoin3(path_array[i], '/', command_args[0]);
 		if (access(command_path, X_OK) == 0)
 		{
-			mypath = command_path;
+			search_path = command_path;
 			break ;
 		}
 		free(command_path);
 		i++;
 	}
-	free_array(str);
-	return (mypath);
+	free_array(path_array);
+	return (search_path);
 }
 
 char	**get_vars(char *cmd)

@@ -30,48 +30,48 @@ bool	check_n_flag(char *str)
 	return (true);
 }
 
-void	ft_echo(char **com, bool flag, int i)
+void	ft_echo(char **command_args, bool flag, int i)
 {
-	if (!com[0])
+	if (!command_args[0])
 		ft_putstr_fd("\n", 1);
-	if (!com[0])
+	if (!command_args[0])
 		return ;
-	if (com[0][0] == '-' && com[0][1] == 'n')
+	if (command_args[0][0] == '-' && command_args[0][1] == 'n')
 	{
-		while (com[0] && com[0][0] == '-')
+		while (command_args[0] && command_args[0][0] == '-')
 		{
-			if (check_n_flag(com[0]) == true)
+			if (check_n_flag(command_args[0]) == true)
 			{
 				flag = false;
-				com++;
+				command_args++;
 			}
 			else
 				break ;
 		}
 	}
-	while (com[i])
+	while (command_args[i])
 	{
-		ft_putstr_fd(com[i++], 1);
-		if (com[i])
+		ft_putstr_fd(command_args[i++], 1);
+		if (command_args[i])
 			ft_putchar_fd(' ', 1);
 	}
 	if (flag == true)
 		ft_putstr_fd("\n", 1);
 }
 
-char	**creat_myenv(void)
+char	**create_environment(void)
 {
-	char	**ptr;
+	char	**env_array;
 	char	buffer[PATH_MAX];
 
-	ptr = (char **)malloc((4) * sizeof(char *));
-	if (!ptr)
+	env_array = (char **)malloc((4) * sizeof(char *));
+	if (!env_array)
 		exiterror();
-	ptr[0] = ft_strjoin("PWD=", getcwd(buffer, PATH_MAX));
-	ptr[1] = ft_strdup("SHLVL=1");
-	ptr[2] = ft_strdup("_=/usr/bin/env");
-	ptr[3] = NULL;
-	return (ptr);
+	env_array[0] = ft_strjoin("PWD=", getcwd(buffer, PATH_MAX));
+	env_array[1] = ft_strdup("SHLVL=1");
+	env_array[2] = ft_strdup("_=/usr/bin/env");
+	env_array[3] = NULL;
+	return (env_array);
 }
 
 t_env	*env_last(t_env *lst)

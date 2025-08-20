@@ -34,46 +34,46 @@ t_env	*env_new(t_env *lst, char *str)
 	return (n_node);
 }
 
-void	creat_env_list(t_env **list, char **env, int subshell, int i)
+void	create_env_list(t_env **list, char **env, int subshell, int i)
 {
-	char	*str;
-	char	**ptr;
+	char	*shell_level_str;
+	char	**env_parts;
 	t_env	*node;
-	t_env	*curr;
+	t_env	*current;
 
 	*list = env_new(*list, ft_strdup(env[i++]));
 	while (env[i])
 	{
 		if (ft_strncmp("SHLVL", env[i], 4) == 0)
 		{
-			ptr = ft_split(env[i++], '=');
-			subshell = ft_atoi(ptr[1]);
-			str = ft_itoa(++subshell);
-			free_array(ptr);
-			node = env_new(*list, ft_strjoin3("SHLVL", '=', str));
-			free(str);
+			env_parts = ft_split(env[i++], '=');
+			subshell = ft_atoi(env_parts[1]);
+			shell_level_str = ft_itoa(++subshell);
+			free_array(env_parts);
+			node = env_new(*list, ft_strjoin3("SHLVL", '=', shell_level_str));
+			free(shell_level_str);
 		}
 		else
 			node = env_new(*list, ft_strdup(env[i++]));
-		curr = env_last(*list);
-		curr->next = node;
+		current = env_last(*list);
+		current->next = node;
 	}
 }
 
-t_env	*copieenv(char **env)
+t_env	*copy_environment(char **env)
 {
-	t_env	*list;
+	t_env	*env_list;
 
-	list = NULL;
+	env_list = NULL;
 	if (!env[0])
 	{
-		env = creat_myenv();
-		creat_env_list(&list, env, 0, 0);
+		env = create_environment();
+		create_env_list(&env_list, env, 0, 0);
 		free_array(env);
-		return (list);
+		return (env_list);
 	}
-	creat_env_list(&list, env, 0, 0);
-	return (list);
+	create_env_list(&env_list, env, 0, 0);
+	return (env_list);
 }
 
 void	ft_putendle(char *str, int fd)
@@ -84,29 +84,29 @@ void	ft_putendle(char *str, int fd)
 	ft_putstr_fd("\n", fd);
 }
 
-void	printmyenv(t_env *list)
+void	print_environment(t_env *env_list)
 {
 	int		i;
-	bool	flag;
+	bool	has_equals;
 
-	while (list)
+	while (env_list)
 	{
 		i = 0;
-		flag = false;
-		while (list->var_name[i])
+		has_equals = false;
+		while (env_list->var_name[i])
 		{
-			if (list->var_name[i] == '=')
+			if (env_list->var_name[i] == '=')
 			{
-				flag = true;
+				has_equals = true;
 				break ;
 			}
 			i++;
 		}
-		if (flag == true)
+		if (has_equals == true)
 		{
-			ft_putstr_fd(list->var_name, 1);
+			ft_putstr_fd(env_list->var_name, 1);
 			ft_putchar_fd('\n', 1);
 		}
-		list = list->next;
+		env_list = env_list->next;
 	}
 }
