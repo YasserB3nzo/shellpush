@@ -12,24 +12,24 @@
 
 #include "../include/minishell.h"
 
-char	*get_content(char **env, char *str)
+char	*get_content(char **env, char *variable_name)
 {
 	int		i;
-	int		size;
-	char	*ptr;
+	int		var_name_length;
+	char	*match_position;
 
 	i = 0;
-	ptr = NULL;
-	if (str == NULL)
+	match_position = NULL;
+	if (variable_name == NULL)
 		return (NULL);
 	while (env[i])
 	{
-		size = ft_strlen(str);
-		ptr = ft_strnstr(env[i], str, size);
-		if (ptr != NULL)
+		var_name_length = ft_strlen(variable_name);
+		match_position = ft_strnstr(env[i], variable_name, var_name_length);
+		if (match_position != NULL)
 		{
-			if (*(ptr + size) == '=')
-				return (ft_strdup(ptr + size + 1));
+			if (*(match_position + var_name_length) == '=')
+				return (ft_strdup(match_position + var_name_length + 1));
 			else
 			{
 				return (ft_strdup(""));

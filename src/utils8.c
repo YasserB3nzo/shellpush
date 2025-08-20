@@ -15,23 +15,23 @@
 bool	check_next_for_both(char *str)
 {
 	int	i;
-	int	flag1;
-	int	flag2;
+	int	double_quote_count;
+	int	single_quote_count;
 
 	i = 0;
-	flag1 = 0;
-	flag2 = 0;
+	double_quote_count = 0;
+	single_quote_count = 0;
 	while (str[i])
 	{
 		if (str[i] == 34)
-			flag1++;
+			double_quote_count++;
 		if (str[i] == 39)
-			flag2++;
+			single_quote_count++;
 		i++;
 	}
-	if ((flag1 != 0 && flag1 % 2 == 0) || (flag2 != 0 && flag2 % 2 == 0))
+	if ((double_quote_count != 0 && double_quote_count % 2 == 0) || (single_quote_count != 0 && single_quote_count % 2 == 0))
 		return (true);
-	if (flag1 == 0 && flag2 == 0)
+	if (double_quote_count == 0 && single_quote_count == 0)
 		return (true);
 	return (false);
 }

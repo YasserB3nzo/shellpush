@@ -12,79 +12,79 @@
 
 #include "../include/minishell.h"
 
-void	commands_clear(t_command **lst)
+void	commands_clear(t_command **command_list)
 {
-	t_command	*curr1;
-	t_command	*curr2;
+	t_command	*current;
+	t_command	*next_command;
 
-	if (lst == NULL || *lst == NULL)
+	if (command_list == NULL || *command_list == NULL)
 		return ;
-	curr1 = *lst;
-	while (curr1->next != NULL)
+	current = *command_list;
+	while (current->next != NULL)
 	{
-		curr2 = curr1->next;
-		free_array(curr1->cmd);
-		slist_clear(&curr1->infile);
-		slist_clear(&curr1->outfile);
-		free(curr1);
-		curr1 = curr2;
+		next_command = current->next;
+		free_array(current->cmd);
+		slist_clear(&current->infile);
+		slist_clear(&current->outfile);
+		free(current);
+		current = next_command;
 	}
-	free_array(curr1->cmd);
-	slist_clear(&curr1->infile);
-	slist_clear(&curr1->outfile);
-	free(curr1);
-	*lst = NULL;
+	free_array(current->cmd);
+	slist_clear(&current->infile);
+	slist_clear(&current->outfile);
+	free(current);
+	*command_list = NULL;
 }
 
-void	lstclear(t_cmds **lst)
+void	lstclear(t_cmds **command_list)
 {
-	t_cmds	*curr1;
-	t_cmds	*curr2;
+	t_cmds	*current;
+	t_cmds	*next_cmd;
 
-	if (lst == NULL || *lst == NULL)
+	if (command_list == NULL || *command_list == NULL)
 		return ;
-	curr1 = *lst;
-	while (curr1->next != NULL)
+	current = *command_list;
+	while (current->next != NULL)
 	{
-		curr2 = curr1->next;
-		free_array(curr1->cmd);
-		free(curr1);
-		curr1 = curr2;
+		next_cmd = current->next;
+		free_array(current->cmd);
+		free(current);
+		current = next_cmd;
 	}
-	free_array(curr1->cmd);
-	free(curr1);
-	*lst = NULL;
+	free_array(current->cmd);
+	free(current);
+	*command_list = NULL;
 }
 
-t_cmds	*lstlast(t_cmds *lst)
+t_cmds	*lstlast(t_cmds *command_list)
 {
-	if (lst == NULL)
-		return (lst);
-	while (lst->next)
+	if (command_list == NULL)
+		return (command_list);
+	while (command_list->next)
 	{
-		lst = lst->next;
+		command_list = command_list->next;
 	}
-	return (lst);
+	return (command_list);
 }
 
-t_command	*command_last(t_command *lst)
+t_command	*command_last(t_command *command_list)
 {
-	if (lst == NULL)
-		return (lst);
-	while (lst->next)
+	if (command_list == NULL)
+		return (command_list);
+	while (command_list->next)
 	{
-		lst = lst->next;
+		command_list = command_list->next;
 	}
-	return (lst);
+	return (command_list);
 }
 
-t_slist	*nodes_last(t_slist *lst)
+t_slist	*nodes_last(t_slist *node_list)
 {
-	if (lst == NULL)
-		return (lst);
-	while (lst->next)
+	if (node_list == NULL)
+		return (node_list);
+	while (node_list->next)
 	{
-		lst = lst->next;
+		node_list = node_list->next;
 	}
-	return (lst);
+	return (node_list);
 }

@@ -126,8 +126,8 @@ typedef struct s_line
 	int					pos;
 	int					size;
 }						t_line;
-t_cmds					*lstlast(t_cmds *lst);
-void					lstclear(t_cmds **lst);
+t_cmds					*lstlast(t_cmds *command_list);
+void					lstclear(t_cmds **command_list);
 t_cmds					*lstnew(char *cmd, t_cmds *stack, char **str);
 void					signal_handler(void);
 char					*ft_strjoin3(char const *s1, char c, char const *s2);
@@ -135,7 +135,7 @@ void					free_array(char **array);
 char					*rm_spaces(char *str);
 void					get_list(char **cmd, int size, t_cmds **lst,
 							t_data *data);
-void					init_tokens(t_cmds *cmds, int size, t_cmds *lst);
+void					init_tokens(t_cmds *cmds, int token_size, t_cmds *lst);
 void					parsing(t_data *data, t_cmds *lst, t_command *commands,
 							int i);
 char					*get_cmd(char *cmd);
@@ -173,12 +173,12 @@ int						run_builtins(int c, t_command *command, t_data *data,
 							int flag);
 int						hand_the_redirectionin(t_command *lst);
 void					ft_handle_sigint(int sig);
-t_slist					*nodes_last(t_slist *lst);
-t_command				*command_last(t_command *lst);
+t_slist					*nodes_last(t_slist *node_list);
+t_command				*command_last(t_command *command_list);
 t_command				*command_new(t_command *lst);
 t_command				*get_command(t_cmds *lst);
 t_command				*get_commands(t_cmds *lst);
-void					commands_clear(t_command **lst);
+void					commands_clear(t_command **command_list);
 void					ft_clear(t_data *data);
 void					print_array(char **str);
 void					printlist(void *tmp);
@@ -226,7 +226,7 @@ int						wait_pid(int *pid, int cmd_num);
 int						execute_command(t_env *list, t_command *command,
 							t_data *data, int index);
 int						get_command_in_one_char(char **str);
-char					*get_content(char **env, char *str);
+char					*get_content(char **env, char *variable_name);
 bool					check_back_for_heredoc(char *str, int index);
 void					slist_clear(t_slist **lst);
 char					**get_file_name(char *str);
