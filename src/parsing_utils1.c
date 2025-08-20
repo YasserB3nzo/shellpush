@@ -40,9 +40,9 @@ static void	token1(t_cmds *cmds, char c)
 	}
 }
 
-static void	token2(t_cmds *cmds, int i)
+static void	token2(t_cmds *cmds, int token_type)
 {
-	if (i == 1)
+	if (token_type == 1)
 	{
 		if (cmds->prev && cmds->prev->token == Non)
 			cmds->prev->token = Cmd;
@@ -50,7 +50,7 @@ static void	token2(t_cmds *cmds, int i)
 			cmds->next->token = AppendFile;
 		cmds->token = Append;
 	}
-	else if (i == 2)
+	else if (token_type == 2)
 	{
 		if (cmds->prev && cmds->prev->token == Non)
 			cmds->prev->token = Cmd;
@@ -60,20 +60,20 @@ static void	token2(t_cmds *cmds, int i)
 	}
 }
 
-void	init_tokens(t_cmds *cmds, int size, t_cmds *lst)
+void	init_tokens(t_cmds *cmds, int token_size, t_cmds *lst)
 {
 	while (cmds)
 	{
-		size = ft_strlen(cmds->cmd[0]);
-		if (size == 1 && cmds->cmd[0][0] == '<')
+		token_size = ft_strlen(cmds->cmd[0]);
+		if (token_size == 1 && cmds->cmd[0][0] == '<')
 			token1(cmds, '<');
-		else if (size == 1 && cmds->cmd[0][0] == '>')
+		else if (token_size == 1 && cmds->cmd[0][0] == '>')
 			token1(cmds, '>');
-		else if (size == 1 && cmds->cmd[0][0] == '|')
+		else if (token_size == 1 && cmds->cmd[0][0] == '|')
 			token1(cmds, '|');
-		else if (size == 2 && cmds->cmd[0][0] == '>' && cmds->cmd[0][1] == '>')
+		else if (token_size == 2 && cmds->cmd[0][0] == '>' && cmds->cmd[0][1] == '>')
 			token2(cmds, 1);
-		else if (size == 2 && cmds->cmd[0][0] == '<' && cmds->cmd[0][1] == '<')
+		else if (token_size == 2 && cmds->cmd[0][0] == '<' && cmds->cmd[0][1] == '<')
 			token2(cmds, 2);
 		else if (!cmds->prev && !cmds->next)
 			cmds->token = Cmd;

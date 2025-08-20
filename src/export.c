@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-char	**sortexport(char **arr, int n)
+char	**sort_export_array(char **arr, int n)
 {
 	int	i;
 	int	j;
@@ -32,29 +32,29 @@ char	**sortexport(char **arr, int n)
 	return (arr);
 }
 
-int	printmyexport(t_env *list)
+int	print_export_variables(t_env *list)
 {
 	int		i;
-	char	**ptr;
+	char	**env_array;
 
 	i = 0;
-	ptr = linked_list_to_array(list);
-	while (ptr[i])
+	env_array = linked_list_to_array(list);
+	while (env_array[i])
 		i++;
-	sortexport(ptr, i);
+	sort_export_array(env_array, i);
 	i = 0;
-	while (ptr[i])
+	while (env_array[i])
 	{
-		if (ptr[i][0] == '_' && ptr[i][1] == '=')
+		if (env_array[i][0] == '_' && env_array[i][1] == '=')
 			i++;
 		else
 		{
 			printf("declare -x ");
-			print_value(ptr[i]);
+			print_value(env_array[i]);
 			i++;
 		}
 	}
-	free_array(ptr);
+	free_array(env_array);
 	return (0);
 }
 
@@ -88,24 +88,24 @@ char	*fill_var(char *var, char *c)
 	return (str);
 }
 
-void	export(t_env *list, char **com, char c, int i)
+void	export(t_env *list, char **command_args, char c, int i)
 {
 	char	**export;
 	bool	export_flag;
 
-	if (com[1] == NULL && printmyexport(list) == 0)
+	if (command_args[1] == NULL && print_export_variables(list) == 0)
 		return ;
-	while (com[i])
+	while (command_args[i])
 	{
 		c = '-';
 		export_flag = false;
-		if (ft_all_isalpha(com[i]) == 1)
-			printf("export: '%s' :not a valid identifier\n", com[i]);
+		if (ft_all_isalpha(command_args[i]) == 1)
+			printf("export: '%s' :not a valid identifier\n", command_args[i]);
 		else
 		{
-			if (com[i][ft_strlen(com[i]) - 1] == '=')
+			if (command_args[i][ft_strlen(command_args[i]) - 1] == '=')
 				export_flag = true;
-			export = get_key_and_value(com[i], NULL, 0, 0);
+			export = get_key_and_value(command_args[i], NULL, 0, 0);
 			if (export[0][ft_strlen(export[0]) - 1] == '+')
 				export[0] = fill_var(export[0], &c);
 			set_env_after_export(list, export, c, export_flag);

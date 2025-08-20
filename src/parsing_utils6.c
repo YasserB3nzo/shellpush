@@ -15,7 +15,7 @@
 char	*grep_variable_name(char *line, int i, int j, int k)
 {
 	int		l;
-	char	*str;
+	char	*variable_name;
 
 	l = 0;
 	if (!line)
@@ -26,13 +26,13 @@ char	*grep_variable_name(char *line, int i, int j, int k)
 	while (line[i] && ft_isalnum(line[i]) == 1)
 		i++;
 	k = i - j;
-	str = malloc(sizeof(char) * (k + 1));
-	if (!str)
+	variable_name = malloc(sizeof(char) * (k + 1));
+	if (!variable_name)
 		return (NULL);
 	while (l < k)
-		str[l++] = line[j++];
-	str[l] = '\0';
-	return (str);
+		variable_name[l++] = line[j++];
+	variable_name[l] = '\0';
+	return (variable_name);
 }
 
 char	*in_var(char *s1, int *in_word)

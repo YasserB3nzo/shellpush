@@ -22,7 +22,7 @@ int	data_init(char **av, t_data *data, char **env)
 	g_signal.ff = 0;
 	if (!env[0])
 		data->path_flag = true;
-	data->list_env = copieenv(env);
+	data->list_env = copy_environment(env);
 	return (1);
 }
 

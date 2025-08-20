@@ -40,29 +40,29 @@ int	how_many_dollar_in(char *str)
 	return (k + 1);
 }
 
-int	lenofmyenv(char **env)
+int	get_environment_length(char **env)
 {
 	int	i;
-	int	mylen;
+	int	length;
 
 	i = 0;
-	mylen = 0;
+	length = 0;
 	while (env[i])
 	{
 		i++;
-		mylen++;
+		length++;
 	}
-	return (mylen);
+	return (length);
 }
 
-t_env	*findmyindex(t_env *list, char *va)
+t_env	*find_env_variable(t_env *list, char *variable_name)
 {
 	int	len;
 
-	len = ft_strlen(va);
+	len = ft_strlen(variable_name);
 	while (list)
 	{
-		if (ft_strncmp(list->var_name, va, len) == 0)
+		if (ft_strncmp(list->var_name, variable_name, len) == 0)
 			return (list);
 		list = list->next;
 	}

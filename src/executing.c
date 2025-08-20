@@ -14,7 +14,7 @@
 
 bool	change_underscore(t_data *data, t_command *command, char *str, int i)
 {
-	t_env	*index;
+	t_env	*env_node;
 
 	if (!command->cmd || !command->cmd[0])
 		return (false);
@@ -23,47 +23,47 @@ bool	change_underscore(t_data *data, t_command *command, char *str, int i)
 	str = command->cmd[--i];
 	if (!str || *str == '\n')
 		return (false);
-	index = findmyindex(data->list_env, "_");
-	if (index)
+	env_node = find_env_variable(data->list_env, "_");
+	if (env_node)
 	{
-		free(index->var_name);
-		index->var_name = ft_strjoin("_=", str);
+		free(env_node->var_name);
+		env_node->var_name = ft_strjoin("_=", str);
 	}
 	else
 	{
-		index = env_new(data->list_env, ft_strjoin("_=", str));
+		env_node = env_new(data->list_env, ft_strjoin("_=", str));
 		data->list_env = env_last(data->list_env);
 		if (data->list_env)
-			data->list_env->next = index;
+			data->list_env->next = env_node;
 		else
-			data->list_env = index;
+			data->list_env = env_node;
 	}
 	return (true);
 }
 
-int	run_builtins(int c, t_command *command, t_data *data, int flag)
+int	run_builtins(int cmd_id, t_command *command, t_data *data, int flag)
 {
-	t_env	*list;
+	t_env	*env_list;
 
-	list = data->list_env;
-	if (c == 1)
-		my_cd(list, command->cmd);
-	else if (c == 2)
-		mypwd(list);
-	else if (c == 3)
-		printmyenv(list);
-	else if (c == 4)
-		export(list, command->cmd, '-', 1);
-	else if (c == 5)
-		data->list_env = unset_env(list, command->cmd, data);
-	else if (c == 6)
+	env_list = data->list_env;
+	if (cmd_id == 1)
+		change_directory(env_list, command->cmd);
+	else if (cmd_id == 2)
+		print_working_directory(env_list);
+	else if (cmd_id == 3)
+		print_environment(env_list);
+	else if (cmd_id == 4)
+		export(env_list, command->cmd, '-', 1);
+	else if (cmd_id == 5)
+		data->list_env = unset_env(env_list, command->cmd, data);
+	else if (cmd_id == 6)
 		exit_myminishell(command->cmd, flag);
-	else if (c == 7)
+	else if (cmd_id == 7)
 		ft_echo(command->cmd + 1, true, 0);
 	return (0);
 }
 
-void	only_builtins(t_data *data, t_command *list, int builtins)
+void	only_builtins(t_data *data, t_command *list, int builtin_command)
 {
 	int	in;
 	int	out;
@@ -73,7 +73,7 @@ void	only_builtins(t_data *data, t_command *list, int builtins)
 	if (list->infile || list->outfile)
 		g_signal.ret = hand_the_redirectionin(list);
 	if (g_signal.ret != 1)
-		run_builtins(builtins, list, data, 0);
+		run_builtins(builtin_command, list, data, 0);
 	if ((g_signal.ret != 1) && list->infile)
 		dup2(in, STDIN_FILENO);
 	else
@@ -113,23 +113,23 @@ void	with_pipe(t_data *data, t_command *list)
 
 int	executing(t_data *data)
 {
-	t_command	*list;
-	int			builtins;
+	t_command	*command_list;
+	int			builtin_command;
 	bool		flag;
 
-	list = data->list;
+	command_list = data->list;
 	flag = false;
-	builtins = get_command_in_one_char(list->cmd);
-	if (!list || (list->cmd && list->cmd[0][0] == '\n'))
+	builtin_command = get_command_in_one_char(command_list->cmd);
+	if (!command_list || (command_list->cmd && command_list->cmd[0][0] == '\n'))
 		return (2);
-	if (!list->next)
-		flag = change_underscore(data, list, NULL, 0);
-	if (builtins != 0 && !list->next)
-		only_builtins(data, list, builtins);
+	if (!command_list->next)
+		flag = change_underscore(data, command_list, NULL, 0);
+	if (builtin_command != 0 && !command_list->next)
+		only_builtins(data, command_list, builtin_command);
 	else
-		with_pipe(data, list);
+		with_pipe(data, command_list);
 	if (flag == true)
-		change_underscore(data, list, NULL, 0);
+		change_underscore(data, command_list, NULL, 0);
 	g_signal.ret_exit = g_signal.ret;
 	return (g_signal.ret);
 }
