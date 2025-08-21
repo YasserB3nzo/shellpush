@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/27 14:11:49 by ybenzidi-          #+#    #+#             */
-/*   Updated: 2025/08/20 18:16:47 by ybenzidi         ###   ########.fr       */
+/*   Created: 2024/04/27 14:11:49 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/21 20:36:43 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-bool	check_next_for_both(char *str)
+bool	has_balanced_quotes(char *str)
 {
 	int	i;
 	int	double_quote_count;
@@ -37,7 +37,7 @@ bool	check_next_for_both(char *str)
 	return (false);
 }
 
-int	get_2d_size(char **vars, char **lines)
+int	calculate_total_string_length(char **vars, char **lines)
 {
 	int	i;
 	int	size;

@@ -54,7 +54,8 @@ SRCS = 	Libft/ft_split.c\
 		src/utils/utils8.c\
 		src/utils/utils9.c\
 		src/errors/errors0.c\
-		src/errors/errors1.c
+		src/errors/errors1.c\
+		src/utils/processvarexp.c\
 
 OBJ = $(SRCS:.c=.o)
 

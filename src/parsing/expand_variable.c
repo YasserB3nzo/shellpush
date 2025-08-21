@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/07 14:21:16 by ybenzidi-          #+#    #+#             */
-/*   Updated: 2025/08/20 18:14:23 by ybenzidi         ###   ########.fr       */
+/*   Created: 2025/08/21 15:42:43 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/21 20:34:53 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	**get_vars_content(char **var, char **env, char *str, int i)
 		else if (check_back_for_heredoc(str, k) == true)
 			vars[i] = ft_strjoin("$", var[i]);
 		else
-			vars[i] = get_content(env, var[i]);
+			vars[i] = get_env_variable_value(env, var[i]);
 		i++;
 		k++;
 	}
@@ -95,7 +95,7 @@ char	*expand_variable(char *str, t_data *data)
 	t_line	line_data;
 
 	line = NULL;
-	if (dollar_is_in(str))
+	if (count_dollar_signs(str))
 	{
 		var = get_vars(str);
 		var = get_vars_content(var, data->env, str, 0);

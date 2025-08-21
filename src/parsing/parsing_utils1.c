@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/04 19:12:43 by ybenzidi-          #+#    #+#             */
-/*   Updated: 2025/08/20 18:14:58 by ybenzidi         ###   ########.fr       */
+/*   Created: 2025/08/21 15:43:07 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/21 15:59:01 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ void	init_tokens(t_cmds *cmds, int token_size, t_cmds *lst)
 		else if (token_size == 1 && cmds->cmd[0][0] == '|')
 			token1(cmds, '|');
 		else if (token_size == 2 && cmds->cmd[0][0] == '>'
-				&& cmds->cmd[0][1] == '>')
+			&& cmds->cmd[0][1] == '>')
 			token2(cmds, 1);
 		else if (token_size == 2 && cmds->cmd[0][0] == '<'
-				&& cmds->cmd[0][1] == '<')
+			&& cmds->cmd[0][1] == '<')
 			token2(cmds, 2);
 		else if (!cmds->prev && !cmds->next)
 			cmds->token = Cmd;
@@ -84,8 +84,7 @@ void	init_tokens(t_cmds *cmds, int token_size, t_cmds *lst)
 				|| cmds->prev->token == Append
 				|| cmds->prev->token == HereDocDel))
 			cmds->token = Cmd;
-		if (cmds)
-			cmds = cmds->next;
+		cmds = cmds->next;
 	}
 	non_token(lst);
 }

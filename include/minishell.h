@@ -6,7 +6,7 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 18:12:46 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/20 18:12:55 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/21 20:34:53 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,15 +155,14 @@ int						check_quotation(char *str);
 int						count_words(char const *s, int count, int in_word);
 char					*ndup(const char *s, size_t n);
 void					remove_quotes(t_cmds *lst);
-int						dollar_is_in(char *str);
-char					*grep_variable_name(char *line, int i, int j, int k);
+int						count_dollar_signs(char *str);
+char					*extract_variable_name(char *line, int i, int j, int k);
 char					**ft_split_str(char *s1);
 char					*expand_variable(char *str, t_data *data);
 char					**get_vars(char *cmd);
 char					*get_final_line(char **lines, char **vars, char *cmd,
 							t_line *line_data);
-int						dollar_is_in(char *str);
-int						count_vars(char *s1);
+int						count_dollar_variables(char *s1);
 bool					check_ex(char *str, int size);
 char					*check_expand(char *str, t_data *data);
 char const				*get_position(char const *s);
@@ -185,10 +184,11 @@ void					printlist(void *tmp);
 int						ft_fork(void);
 void					ft_close(int fd, char *str);
 int						executing(t_data *data);
-void					only_builtins(t_data *data, t_command *list, int builtin_command);
+void					only_builtins(t_data *data, t_command *list,
+							int builtin_command);
 void					change_directory(t_env *list, char **command_args);
-void					ft_echo(char **command_args, bool flag, int i);
-void					exiterror(void);
+void					execute_echo_command(char **command_args, bool flag,
+							int i);
 bool					check_n_flag(char *str);
 t_env					*env_new(t_env *lst, char *str);
 t_env					*env_last(t_env *lst);
@@ -196,13 +196,14 @@ char					**linked_list_to_array(t_env *list);
 char					**sort_export_array(char **arr, int n);
 void					senv_clear(t_env **lst);
 char					**linked_list_to_array(t_env *list);
-t_env					*unset_env(t_env *list, char **command_args, t_data *data);
+t_env					*unset_env(t_env *list, char **command_args,
+							t_data *data);
 void					exit_myminishell(char **command_args, int flag);
-char					*get_my_path(t_env *list, char **command_args, bool flag, int i);
+char					*get_my_path(t_env *list, char **command_args,
+							bool flag, int i);
 void					export(t_env *list, char **command_args, char c, int i);
 int						print_export_variables(t_env *list);
 int						get_environment_length(char **env);
-void					exiterror(void);
 t_env					*copy_environment(char **env);
 void					ft_putendle(char *str, int fd);
 void					print_environment(t_env *list);
@@ -226,14 +227,16 @@ int						wait_pid(int *pid, int cmd_num);
 int						execute_command(t_env *list, t_command *command,
 							t_data *data, int index);
 int						get_command_in_one_char(char **str);
-char					*get_content(char **env, char *variable_name);
+char					*get_env_variable_value(char **env,
+							char *variable_name);
 bool					check_back_for_heredoc(char *str, int index);
 void					slist_clear(t_slist **lst);
 char					**get_file_name(char *str);
 bool					check_next(char *str);
 char					**get_name(char *str);
 int						is_numeric(char *str);
-int						get_2d_size(char **vars, char **lines);
+int						calculate_total_string_length(char **vars,
+							char **lines);
 bool					check_eq(char *str);
 void					set_env_if_plus(t_env *env_node, char *export_value);
 int						how_many_dollar_in(char *str);
@@ -242,8 +245,8 @@ int						check_double(char *cmd, int i);
 void					set_env_after_export(t_env *list, char **export, char c,
 							bool export_flag);
 void					set_env_after_cd(t_env *list, char *key, char *value);
-char					*find_variable_value(t_env *list, t_env *head, char *variable_name,
-							bool flag);
+char					*find_variable_value(t_env *list, t_env *head,
+							char *variable_name, bool flag);
 char					**array_copy(char **str);
 t_cmds					*copy_node(char **cmd, t_token token, bool flag);
 t_cmds					*copy_single_node(t_cmds *curr, int *i);
@@ -256,5 +259,8 @@ void					ft_puterror_fd(char *str1, char *str2);
 void					print_value(char *str);
 char					*increment_s1(char *s1);
 bool					is_it_inside(char *str);
+void					process_variable_expansion(char *cmd, char **vars,
+							t_line *data);
+int						copy_string_to_buffer(char *line, char *ptr, int pos);
 
 #endif

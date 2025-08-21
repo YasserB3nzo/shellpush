@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/02 18:41:13 by ybenzidi-          #+#    #+#             */
-/*   Updated: 2025/08/20 18:15:58 by ybenzidi         ###   ########.fr       */
+/*   Created: 2025/08/21 15:41:35 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/21 20:34:53 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	**get_vars(char *cmd)
 				j++;
 		}
 		if (cmd[j] == '$' && cmd[j + 1] && cmd[j + 1] != '$')
-			var[k++] = grep_variable_name(cmd + j, 0, 0, 0);
+			var[k++] = extract_variable_name(cmd + j, 0, 0, 0);
 		else if (cmd[j] == '$' && cmd[j + 1] == '$')
 			j++;
 		if (cmd[j])

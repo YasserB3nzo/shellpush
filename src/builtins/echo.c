@@ -6,19 +6,19 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 14:10:06 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/20 14:10:10 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/21 20:34:53 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exiterror(void)
+void	print_error_message(void)
 {
 	write(1, "error\n", 7);
 	return ;
 }
 
-bool	check_n_flag(char *str)
+bool	is_valid_n_flag(char *str)
 {
 	str++;
 	while (str && *str)
@@ -30,7 +30,7 @@ bool	check_n_flag(char *str)
 	return (true);
 }
 
-void	ft_echo(char **command_args, bool flag, int i)
+void	execute_echo_command(char **command_args, bool flag, int i)
 {
 	if (!command_args[0])
 		ft_putstr_fd("\n", 1);
@@ -40,7 +40,7 @@ void	ft_echo(char **command_args, bool flag, int i)
 	{
 		while (command_args[0] && command_args[0][0] == '-')
 		{
-			if (check_n_flag(command_args[0]) == true)
+			if (is_valid_n_flag(command_args[0]) == true)
 			{
 				flag = false;
 				command_args++;
@@ -66,7 +66,7 @@ char	**create_environment(void)
 
 	env_array = (char **)malloc((4) * sizeof(char *));
 	if (!env_array)
-		exiterror();
+		exit(EXIT_FAILURE);
 	env_array[0] = ft_strjoin("PWD=", getcwd(buffer, PATH_MAX));
 	env_array[1] = ft_strdup("SHLVL=1");
 	env_array[2] = ft_strdup("_=/usr/bin/env");

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 20:57:54 by ybenzidi-          #+#    #+#             */
-/*   Updated: 2025/08/20 18:15:28 by ybenzidi         ###   ########.fr       */
+/*   Created: 2025/08/21 15:44:04 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/21 20:34:53 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char	**ft_split_str(char *s1)
 
 	if (s1 == NULL)
 		return (NULL);
-	word_count = count_vars(s1);
+	word_count = count_dollar_variables(s1);
 	if (word_count == 0)
 		return (NULL);
 	ptr = malloc((word_count + 2) * sizeof(char *));

@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/22 14:47:27 by ybenzidi-          #+#    #+#             */
-/*   Updated: 2025/08/20 18:15:23 by ybenzidi         ###   ########.fr       */
+/*   Created: 2025/08/21 15:43:57 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/21 20:34:53 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*grep_variable_name(char *line, int i, int j, int k)
+char	*extract_variable_name(char *line, int i, int j, int k)
 {
 	int		l;
 	char	*variable_name;
@@ -52,7 +52,7 @@ char	*in_var(char *s1, int *in_word)
 	return (s1);
 }
 
-int	count_vars(char *s1)
+int	count_dollar_variables(char *s1)
 {
 	int	count;
 	int	in_word;
@@ -81,7 +81,7 @@ int	count_vars(char *s1)
 	return (count);
 }
 
-int	dollar_is_in(char *str)
+int	count_dollar_signs(char *str)
 {
 	int	i;
 	int	k;
@@ -110,7 +110,7 @@ int	dollar_is_in(char *str)
 	return (k);
 }
 
-bool	check_next(char *str)
+bool	has_even_quotes(char *str)
 {
 	int	i;
 	int	flag;

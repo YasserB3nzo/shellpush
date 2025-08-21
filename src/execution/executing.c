@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 11:03:16 by ybenzidi-          #+#    #+#             */
-/*   Updated: 2025/08/20 18:14:19 by ybenzidi         ###   ########.fr       */
+/*   Created: 2025/08/21 15:42:23 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/21 20:34:53 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	run_builtins(int cmd_id, t_command *command, t_data *data, int flag)
 	else if (cmd_id == 6)
 		exit_myminishell(command->cmd, flag);
 	else if (cmd_id == 7)
-		ft_echo(command->cmd + 1, true, 0);
+		execute_echo_command(command->cmd + 1, true, 0);
 	return (0);
 }
 
