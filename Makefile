@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -ggdb3 -g3 -fsanitize=address -fno-omit-frame-pointer#-w  #-v
+CFLAGS = -Wall -Wextra -Werror -ggdb3 -g3 -fsanitize=address -fno-omit-frame-pointer
 
 SRCS = 	Libft/ft_split.c\
 		Libft/ft_putstr_fd.c\
@@ -21,7 +21,7 @@ SRCS = 	Libft/ft_split.c\
 		Libft/ft_strchr.c\
 		Libft/ft_itoa.c\
 		Libft/ft_atoi.c\
-		src/core/minishell.c\
+		minishell.c\
 		src/parsing/parsing.c\
 		src/parsing/parsing_utils1.c\
 		src/parsing/parsing_utils2.c\

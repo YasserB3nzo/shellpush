@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/27 14:11:49 by ksohail-          #+#    #+#             */
+/*   Created: 2024/04/27 14:11:49 by ybenzidi-          #+#    #+#             */
 /*   Updated: 2025/08/20 18:14:50 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "./include/minishell.h"
 
 t_signal	g_signal;
 
