@@ -89,30 +89,16 @@ char	*join_vars(char **vars)
 
 char	*expand_variable(char *str, t_data *data)
 {
-	char	**var;
-	char	**spleted_line;
-	char	*line;
-	t_line	line_data;
+	char	*result;
 
-	line = NULL;
-	if (count_dollar_signs(str))
-	{
-		var = get_vars(str);
-		var = get_vars_content(var, data->env, str, 0);
-		spleted_line = ft_split_str(str);
-		if (spleted_line == NULL)
-			line = join_vars(var);
-		else
-		{
-			line = get_final_line(spleted_line, var, str, &line_data);
-			free_array(spleted_line);
-		}
-		free_array(var);
-	}
-	else
+	if (!str || !data || !data->env)
 		return (str);
-	free(str);
-	return (line);
+		
+	result = simple_expand_variable(str, data->env);
+	if (result != str)
+		free(str);
+	
+	return (result);
 }
 
 char	*check_expand(char *str, t_data *data)

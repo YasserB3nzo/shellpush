@@ -190,6 +190,7 @@ int						count_dollar_variables(char *s1);
 int						how_many_dollar_in(char *str);
 char					*extract_variable_name(char *line, int i, int j, int k);
 char					*expand_variable(char *str, t_data *data);
+char					*simple_expand_variable(char *str, char **env);
 char					*check_expand(char *str, t_data *data);
 char					**get_vars(char *cmd);
 char					*get_final_line(char **lines, char **vars, char *cmd, t_line *line_data);

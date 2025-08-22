@@ -12,6 +12,63 @@
 
 #include "../../include/minishell.h"
 
+char	*simple_expand_variable(char *str, char **env)
+{
+	char	*result;
+	char	*var_name;
+	char	*var_value;
+	int		i, j, result_pos;
+	int		result_len;
+
+	if (!str || !env)
+		return (str);
+	result_len = ft_strlen(str) + 1000;
+	result = malloc(result_len);
+	if (!result)
+		return (str);
+	result_pos = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]) || str[i + 1] == '?'))
+		{
+			i++; // Skip $
+			j = i;
+			if (str[i] == '?')
+			{
+				i++;
+				var_name = ft_strdup("?");
+			}
+			else
+			{
+				while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+					i++;
+				var_name = ndup(&str[j], i - j);
+			}
+			if (ft_strcmp(var_name, "?") == 0)
+				var_value = ft_itoa(g_signal.ret);
+			else
+				var_value = get_env_variable_value(env, var_name);
+			if (var_value)
+			{
+				j = 0;
+				while (var_value[j] && result_pos < result_len - 1)
+					result[result_pos++] = var_value[j++];
+				free(var_value);
+			}
+			free(var_name);
+		}
+		else
+		{
+			if (result_pos < result_len - 1)
+				result[result_pos++] = str[i];
+			i++;
+		}
+	}
+	result[result_pos] = '\0';
+	return (result);
+}
+
 char	*get_env_variable_value(char **env, char *variable_name)
 {
 	int		i;
