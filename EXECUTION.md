@@ -7,6 +7,32 @@ This document explains the execution flow of the shell implementation, detailing
 ### 1. `executing(t_data *data)`
 The main execution function that orchestrates the entire command execution process.
 
+**Code:**
+```c
+int executing(t_data *data)
+{
+    t_command   *command_list;
+    int         builtin_command;
+    bool        flag;
+
+    command_list = data->list;
+    flag = false;
+    builtin_command = get_command_in_one_char(command_list->cmd);
+    if (!command_list || (command_list->cmd && command_list->cmd[0][0] == '\n'))
+        return (2);
+    if (!command_list->next)
+        flag = change_underscore(data, command_list, NULL, 0);
+    if (builtin_command != 0 && !command_list->next)
+        only_builtins(data, command_list, builtin_command);
+    else
+        with_pipe(data, command_list);
+    if (flag == true)
+        change_underscore(data, command_list, NULL, 0);
+    g_signal.ret_exit = g_signal.ret;
+    return (g_signal.ret);
+}
+```
+
 **Flow:**
 1. Gets the command list and checks for built-in commands
 2. Validates empty commands and newlines
@@ -42,7 +68,39 @@ Handles execution of built-in commands:
 ### 4. Pipeline Execution
 
 #### `with_pipe(t_data *data, t_command *list)`
-Manages command execution with pipes:
+Manages command execution with pipes.
+
+**Code:**
+```c
+void with_pipe(t_data *data, t_command *list)
+{
+    data->k = 0;
+    data->pid = malloc(sizeof(int) * (get_command_size(list)));
+    data->fd_in = STDIN_FILENO;
+    while (list)
+    {
+        if (list->next)
+        {
+            if (pipe(data->fd) == -1)
+                break;
+        }
+        g_signal.ret = execute_command(data->list_env, list, data, data->k++);
+        if (list->next)
+            ft_close(data->fd[1], "data->fd[0]");
+        if (list->prev)
+            ft_close(data->fd_in, "data->fd[1]");
+        if (list->next)
+            data->fd_in = data->fd[0];
+        list = list->next;
+    }
+    if (g_signal.ret == 0 && data->k != 0)
+        g_signal.ret = wait_pid(data->pid, data->k);
+    free(data->pid);
+    data->pid = NULL;
+}
+```
+
+**Process:**
 1. Allocates process ID array
 2. For each command:
    - Creates pipes if needed
