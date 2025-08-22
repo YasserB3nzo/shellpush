@@ -31,6 +31,17 @@ void	change_directory(t_env *env_list, char **command_args)
 		else
 			change_directory_path(env_list, home_path);
 	}
+	else if (command_args[1][0] == '-' && command_args[1][1] == '\0')
+	{
+		char *oldpwd = find_variable_value(env_list, env_list, "OLDPWD", false);
+		if (!oldpwd)
+			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+		else {
+			change_directory_path(env_list, oldpwd);
+			ft_putstr_fd(oldpwd, 1);
+			ft_putchar_fd('\n', 1);
+		}
+	}
 	else
 		change_directory_path(env_list, command_args[1]);
 }
