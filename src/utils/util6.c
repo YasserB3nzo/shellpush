@@ -16,19 +16,16 @@ char	*get_env_variable_value(char **env, char *variable_name)
 {
 	int		i;
 	int		var_name_length;
-	char	*match_position;
 
 	i = 0;
 	if (variable_name == NULL)
 		return (NULL);
+	var_name_length = ft_strlen(variable_name);
 	while (env[i])
 	{
-		var_name_length = ft_strlen(variable_name);
-		match_position = ft_strnstr(env[i], variable_name, var_name_length);
-		if (match_position && *(match_position + var_name_length) == '=')
-			return (ft_strdup(match_position + var_name_length + 1));
-		else if (match_position)
-			return (ft_strdup(""));
+		if (ft_strncmp(env[i], variable_name, var_name_length) == 0
+			&& env[i][var_name_length] == '=')
+			return (ft_strdup(env[i] + var_name_length + 1));
 		i++;
 	}
 	return (ft_strdup(""));

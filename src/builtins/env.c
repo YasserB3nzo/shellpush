@@ -76,14 +76,6 @@ t_env	*copy_environment(char **env)
 	return (env_list);
 }
 
-void	ft_putendle(char *str, int fd)
-{
-	if (!str)
-		return ;
-	ft_putstr_fd(str, fd);
-	ft_putstr_fd("\n", fd);
-}
-
 void	print_environment(t_env *env_list)
 {
 	int		i;

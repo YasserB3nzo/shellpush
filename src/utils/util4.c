@@ -99,9 +99,9 @@ void	execute_command_part_three(char **com, t_command *command, t_data *data,
 		ft_putstr_fd(": ", 2);
 		stat(path, &stats);
 		if (S_ISDIR(stats.st_mode))
-			ft_putendle("Is a directory", 2);
+			ft_putendl_fd("Is a directory", 2);
 		else
-			ft_putendle(strerror(errno), 2);
+			ft_putendl_fd(strerror(errno), 2);
 		senv_clear(&data->list_env);
 		free_array(data->env);
 		exit(-1);

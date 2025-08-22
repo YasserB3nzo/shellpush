@@ -15,6 +15,7 @@
 
 /* Standard includes */
 # include "../Libft/libft.h"
+# include <dirent.h>
 # include <errno.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -27,6 +28,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <time.h>
 
 /* Forward declaration */
 typedef struct s_data	t_data;

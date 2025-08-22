@@ -6,6 +6,7 @@ CFLAGS = -Wall -Wextra -Werror -ggdb3 -g3 -fsanitize=address -fno-omit-frame-poi
 
 SRCS = 	Libft/ft_split.c\
 		Libft/ft_putstr_fd.c\
+		Libft/ft_putendl_fd.c\
 		Libft/ft_strjoin.c\
 		Libft/ft_strdup.c\
 		Libft/ft_putchar_fd.c\

@@ -17,7 +17,7 @@ void	change_directory(t_env *env_list, char **command_args)
 	char	*home_path;
 	int		arg_count;
 
-	arg_count = morethan2arg(command_args);
+	arg_count = array_size(command_args);
 	if (arg_count > 2)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
