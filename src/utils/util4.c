@@ -97,8 +97,7 @@ void	execute_command_part_three(char **com, t_command *command, t_data *data,
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(com[0], 2);
 		ft_putstr_fd(": ", 2);
-		stat(path, &stats);
-		if (S_ISDIR(stats.st_mode))
+		if (stat(path, &stats) == 0 && S_ISDIR(stats.st_mode))
 			ft_putendl_fd("Is a directory", 2);
 		else
 			ft_putendl_fd(strerror(errno), 2);
