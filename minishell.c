@@ -14,9 +14,8 @@
 
 t_signal	g_signal;
 
-int	data_init(char **av, t_data *data, char **env)
+int	data_init(t_data *data, char **env)
 {
-	(void)av;
 	g_signal.ret = 0;
 	g_signal.ret_exit = 0;
 	data->path_flag = false;
@@ -76,7 +75,8 @@ int	main(int ac, char **av, char **env)
 {
 	t_data	data;
 
-	if (ac != 1 || data_init(av, &data, env) == 0)
+	(void)av;
+	if (ac != 1 || data_init(&data, env) == 0)
 		return (1);
 	shell_loop(&data);
 	cleanup_and_exit(&data);
