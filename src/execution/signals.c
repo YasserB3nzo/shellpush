@@ -22,6 +22,7 @@ void	printsignalsc(int signal)
 			rl_on_new_line();
 			rl_redisplay();
 			g_signal.ret = 130;
+			g_signal.ret_exit = 130;
 		}
 	}
 }
@@ -43,6 +44,7 @@ void	ft_handle_sigint(int sig)
 	rl_on_new_line();
 	rl_redisplay();
 	g_signal.ret = 130;
+	g_signal.ret_exit = 130;
 }
 
 void	signal_handler(void)
