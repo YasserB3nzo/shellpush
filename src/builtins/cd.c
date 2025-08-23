@@ -110,18 +110,3 @@ char	*find_variable_value(t_env *list, t_env *head, char *variable_name,
 		return ("/usr/bin");
 	return (NULL);
 }
-
-int	morethan2arg(char **command_args)
-{
-	int	i;
-	int	counter;
-
-	i = 0;
-	counter = 0;
-	while (command_args[i])
-	{
-		i++;
-		counter++;
-	}
-	return (counter);
-}

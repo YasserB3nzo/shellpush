@@ -18,6 +18,14 @@ bool	change_underscore(t_data *data, t_command *command, char *str, int i)
 
 	if (!command->cmd || !command->cmd[0])
 		return (false);
+	if (ft_strcmp(command->cmd[0], "cd") == 0 ||
+		ft_strcmp(command->cmd[0], "pwd") == 0 ||
+		ft_strcmp(command->cmd[0], "env") == 0 ||
+		ft_strcmp(command->cmd[0], "export") == 0 ||
+		ft_strcmp(command->cmd[0], "unset") == 0 ||
+		ft_strcmp(command->cmd[0], "exit") == 0 ||
+		ft_strcmp(command->cmd[0], "echo") == 0)
+		return (false);
 	while (command->cmd[i])
 		i++;
 	str = command->cmd[--i];
@@ -54,8 +62,13 @@ int	run_builtins(int cmd_id, t_command *command, t_data *data, int flag)
 		print_environment(env_list);
 	else if (cmd_id == 4)
 		export(env_list, command->cmd, '-', 1);
-	else if (cmd_id == 5)
-		data->list_env = unset_env(env_list, command->cmd, data);
+       else if (cmd_id == 5) {
+	       data->list_env = unset_env(env_list, command->cmd, data);
+	       if (data->env) {
+		       free_array(data->env);
+	       }
+	       data->env = linked_list_to_array(data->list_env);
+       }
 	else if (cmd_id == 6)
 		exit_myminishell(command->cmd, flag);
 	else if (cmd_id == 7)

@@ -36,7 +36,7 @@ int	main(int ac, char **av, char **env)
 	{
 		signal_handler();
 		data.env = linked_list_to_array(data.list_env);
-		data.line = readline("minishell$ ");
+		data.line = readline("\001\033[1;35m\002minishell$ \001\033[0m\002");
 		if (!data.line)
 			break ;
 		else if (check_quotation(data.line) != -1)

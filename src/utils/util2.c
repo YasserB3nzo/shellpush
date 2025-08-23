@@ -62,7 +62,8 @@ t_env	*find_env_variable(t_env *list, char *variable_name)
 	len = ft_strlen(variable_name);
 	while (list)
 	{
-		if (ft_strncmp(list->var_name, variable_name, len) == 0)
+		if (ft_strncmp(list->var_name, variable_name, len) == 0 &&
+			(list->var_name[len] == '=' || list->var_name[len] == '\0'))
 			return (list);
 		list = list->next;
 	}

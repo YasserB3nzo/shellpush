@@ -12,21 +12,25 @@
 
 #include "../../include/minishell.h"
 
-int	errormsg_v1(char *str)
+/* Consolidated error message function */
+int	print_syntax_error(char *token, bool duplicate)
 {
 	ft_putstr_fd("minishel: syntax error near unexpected token '", 2);
-	ft_putstr_fd(str, 2);
+	ft_putstr_fd(token, 2);
+	if (duplicate)
+		ft_putstr_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
 	return (2);
 }
 
+int	errormsg_v1(char *str)
+{
+	return (print_syntax_error(str, false));
+}
+
 int	errormsg_v2(char *str)
 {
-	ft_putstr_fd("minishel: syntax error near unexpected token '", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("'\n", 2);
-	return (2);
+	return (print_syntax_error(str, true));
 }
 
 int	check_for_pipe(t_cmds *cmds)
