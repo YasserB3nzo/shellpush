@@ -1,0 +1,21 @@
+# Build artifacts
+*.o
+minishell
+
+# Debug files
+*.dSYM/
+*.dwarf
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*~
+*.tmp
+*.swp
+*.swo
