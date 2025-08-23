@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 16:58:26 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/23 16:58:36 by ybenzidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
-#include <limits.h>
-#ifndef PATH_MAX
-# define PATH_MAX 4096
-#endif
 
 void	change_directory(t_env *env_list, char **command_args)
 {
 	char	*home_path;
 	int		arg_count;
+	char	*oldpwd_val;
+	char	*oldpwd_dup;
+	char	buffer[PATH_MAX];
+	char	*current_pwd;
 
 	arg_count = array_size(command_args);
 	if (arg_count > 2)
@@ -25,15 +37,11 @@ void	change_directory(t_env *env_list, char **command_args)
 	}
 	else if (command_args[1][0] == '-' && command_args[1][1] == '\0')
 	{
-		char *oldpwd_val = find_variable_value(env_list, env_list, "OLDPWD", false);
+		oldpwd_val = find_variable_value(env_list, env_list, "OLDPWD", false);
 		if (!oldpwd_val)
 			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
 		else
 		{
-			char *oldpwd_dup;
-			char buffer[PATH_MAX];
-			char *current_pwd;
-
 			oldpwd_dup = ft_strdup(oldpwd_val);
 			if (!oldpwd_dup)
 				return ;

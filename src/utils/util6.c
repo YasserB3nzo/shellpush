@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   util6.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 16:56:30 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/23 16:56:40 by ybenzidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 char	*simple_expand_variable(char *str, char **env)
@@ -12,6 +24,7 @@ char	*simple_expand_variable(char *str, char **env)
 	int		result_pos;
 	int		in_single;
 	int		in_double;
+	int		j;
 
 	if (!str || !env)
 		return (str);
@@ -29,8 +42,8 @@ char	*simple_expand_variable(char *str, char **env)
 			in_single = !in_single;
 		else if (str[i] == '"' && !in_single)
 			in_double = !in_double;
-		if (!in_single && str[i] == '$' && str[i + 1]
-			&& (ft_isalnum(str[i + 1]) || str[i + 1] == '?'))
+		if (!in_single && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
+				|| str[i + 1] == '?'))
 		{
 			var_start = &str[i + 1];
 			var_end = var_start;
@@ -51,7 +64,7 @@ char	*simple_expand_variable(char *str, char **env)
 				var_value = get_env_variable_value(env, var_name);
 			if (var_value)
 			{
-				int j = 0;
+				j = 0;
 				while (var_value[j] && result_pos < result_len - 1)
 					result[result_pos++] = var_value[j++];
 				free(var_value);
@@ -70,8 +83,8 @@ char	*simple_expand_variable(char *str, char **env)
 
 char	*get_env_variable_value(char **env, char *variable_name)
 {
-	int		i;
-	int		var_name_length;
+	int	i;
+	int	var_name_length;
 
 	i = 0;
 	if (variable_name == NULL)
@@ -136,8 +149,8 @@ void	init_line_data(t_line *line_data, char **lines, char **vars, char *cmd)
 	line_data->k = 0;
 	line_data->size = 0;
 	line_data->pos = 0;
-	line_data->line = malloc(sizeof(char)
-			* (calculate_total_string_length(vars, lines) + 1));
+	line_data->line = malloc(sizeof(char) * (calculate_total_string_length(vars,
+					lines) + 1));
 	escape_dollars_in_single_quotes(cmd);
 }
 
@@ -149,8 +162,8 @@ char	*get_final_line(char **lines, char **vars, char *cmd, t_line *data)
 		if ((cmd[data->size] != '$' || cmd[data->size + 1] != '$')
 			&& lines[data->k])
 		{
-			data->pos = copy_string_to_buffer(data->line,
-					lines[data->k++], data->pos);
+			data->pos = copy_string_to_buffer(data->line, lines[data->k++],
+					data->pos);
 			while (cmd[data->size] && cmd[data->size] != '$')
 				data->size++;
 		}

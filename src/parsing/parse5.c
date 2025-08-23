@@ -6,7 +6,7 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 15:43:47 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/22 15:08:47 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/23 16:58:06 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ size_t	get_size(char *str)
 			k += 2;
 		}
 		else if ((str[i] == 39 && str[i + 1] == 39) || (str[i] == 34 && str[i
-					+ 1] == 34))
+				+ 1] == 34))
 			i++;
 		i++;
 	}
@@ -48,7 +48,7 @@ char	*get_string(char *s, size_t i, size_t k, size_t size)
 	while (k < size)
 	{
 		while ((s[i] == 39 && s[i + 1] && s[i + 1] != 39) || (s[i] == 34 && s[i
-					+ 1] && s[i + 1] != 34))
+				+ 1] && s[i + 1] != 34))
 		{
 			tmp = s[i++];
 			while (s[i] && s[i + 1] && s[i] != tmp)

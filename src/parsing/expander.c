@@ -93,11 +93,9 @@ char	*expand_variable(char *str, t_data *data)
 
 	if (!str || !data || !data->env)
 		return (str);
-		
 	result = simple_expand_variable(str, data->env);
 	if (result != str)
 		free(str);
-	
 	return (result);
 }
 
