@@ -35,6 +35,27 @@ static void	cleanup_and_exit(t_data *data)
 	ft_putstr_fd("exit\n", 2);
 }
 
+static void	process_line(t_data *data)
+{
+	if (is_spaces(data->line) == 0)
+	{
+		add_history(data->line);
+		g_signal.ret = 0;
+		g_signal.ret_exit = 0;
+	}
+	else if (check_quotation(data->line) != -1)
+	{
+		add_history(data->line);
+		parsing(data, NULL, NULL, -1);
+		g_signal.ret_exit = g_signal.ret;
+	}
+	else
+	{
+		g_signal.ret = 2;
+		g_signal.ret_exit = 2;
+	}
+}
+
 static void	shell_loop(t_data *data)
 {
 	while (1)
@@ -44,17 +65,7 @@ static void	shell_loop(t_data *data)
 		data->line = readline("\001\033[1;35m\002minishell$ \001\033[0m\002");
 		if (!data->line)
 			break ;
-		else if (check_quotation(data->line) != -1)
-		{
-			add_history(data->line);
-			parsing(data, NULL, NULL, -1);
-			g_signal.ret_exit = g_signal.ret;
-		}
-		else
-		{
-			g_signal.ret = 2;
-			g_signal.ret_exit = 2;
-		}
+		process_line(data);
 		free(data->line);
 		free_array(data->env);
 		g_signal.ff = 0;
