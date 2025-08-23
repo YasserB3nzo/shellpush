@@ -233,12 +233,12 @@ int						errormsg(char *str);
 int						errormsg_v1(char *str);
 int						errormsg_v2(char *str);
 int						errors_managment(t_data *data, int flag);
-void					printsignalsc(int signal);
+void					shell_signal_redraw(int signal);
 void					ft_puterror_fd(char *str1, char *str2);
 
 /* Signal handling */
-void					signal_handler(void);
-void					ft_handle_sigint(int sig);
+void					install_shell_signal_handlers(void);
+void					shell_sigint_handler(int sig);
 
 /* Execution functions */
 int						executing(t_data *data);

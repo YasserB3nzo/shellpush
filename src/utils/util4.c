@@ -91,7 +91,7 @@ void	execute_command_part_three(char **com, t_command *command, t_data *data,
 	cmd = get_command_in_one_char(com);
 	if (cmd == 0)
 	{
-		if (signal(SIGQUIT, printsignalsc) != SIG_ERR)
+		if (signal(SIGQUIT, shell_signal_redraw) != SIG_ERR)
 			g_signal.ret = 131;
 		execve(path, com, data->env);
 		ft_putstr_fd("minishell: ", 2);

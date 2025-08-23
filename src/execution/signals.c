@@ -12,7 +12,8 @@
 
 #include "../../include/minishell.h"
 
-void	printsignalsc(int signal)
+/* Handle a signal in child context used before exec to redraw prompt on SIGINT */
+void	shell_signal_redraw(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -26,14 +27,16 @@ void	printsignalsc(int signal)
 	}
 }
 
-void	signal_hand2(int s)
+/* Restore default SIGINT handling (used in specific child scenarios) */
+void	set_sigint_default(int s)
 {
 	(void)s;
 	signal(SIGINT, SIG_DFL);
 	write(1, "\n", 1);
 }
 
-void	ft_handle_sigint(int sig)
+/* Interactive SIGINT handler for main shell loop */
+void	shell_sigint_handler(int sig)
 {
 	if (g_signal.ff == 1)
 		return ;
@@ -45,9 +48,10 @@ void	ft_handle_sigint(int sig)
 	g_signal.ret = 130;
 }
 
-void	signal_handler(void)
+/* Install main shell signal handlers */
+void	install_shell_signal_handlers(void)
 {
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, ft_handle_sigint);
+	signal(SIGINT, shell_sigint_handler);
 	signal(SIGTSTP, SIG_IGN);
 }
