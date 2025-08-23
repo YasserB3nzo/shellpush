@@ -1,16 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/02 18:40:02 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/21 15:47:15 by ybenzidi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/minishell.h"
+#include <limits.h>
+#ifndef PATH_MAX
+# define PATH_MAX 4096
+#endif
 
 void	change_directory(t_env *env_list, char **command_args)
 {
@@ -33,13 +25,29 @@ void	change_directory(t_env *env_list, char **command_args)
 	}
 	else if (command_args[1][0] == '-' && command_args[1][1] == '\0')
 	{
-		char *oldpwd = find_variable_value(env_list, env_list, "OLDPWD", false);
-		if (!oldpwd)
+		char *oldpwd_val = find_variable_value(env_list, env_list, "OLDPWD", false);
+		if (!oldpwd_val)
 			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
-		else {
-			change_directory_path(env_list, oldpwd);
-			ft_putstr_fd(oldpwd, 1);
-			ft_putchar_fd('\n', 1);
+		else
+		{
+			char *oldpwd_dup;
+			char buffer[PATH_MAX];
+			char *current_pwd;
+
+			oldpwd_dup = ft_strdup(oldpwd_val);
+			if (!oldpwd_dup)
+				return ;
+			current_pwd = getcwd(buffer, PATH_MAX);
+			if (chdir(oldpwd_dup) == 0)
+			{
+				set_env_after_cd(env_list, "OLDPWD", current_pwd);
+				set_env_after_cd(env_list, "PWD", oldpwd_dup);
+				ft_putstr_fd(oldpwd_dup, 1);
+				ft_putchar_fd('\n', 1);
+			}
+			else
+				perror("cd");
+			free(oldpwd_dup);
 		}
 	}
 	else

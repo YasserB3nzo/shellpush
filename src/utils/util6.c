@@ -1,24 +1,17 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   util6.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/22 15:10:27 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/22 15:10:28 by ybenzidi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/minishell.h"
 
 char	*simple_expand_variable(char *str, char **env)
 {
 	char	*result;
+	char	*var_start;
+	char	*var_end;
 	char	*var_name;
 	char	*var_value;
-	int		i, j, result_pos;
+	int		i;
 	int		result_len;
+	int		result_pos;
+	int		in_single;
+	int		in_double;
 
 	if (!str || !env)
 		return (str);
@@ -28,22 +21,29 @@ char	*simple_expand_variable(char *str, char **env)
 		return (str);
 	result_pos = 0;
 	i = 0;
+	in_single = 0;
+	in_double = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]) || str[i + 1] == '?'))
+		if (str[i] == '\'' && !in_double)
+			in_single = !in_single;
+		else if (str[i] == '"' && !in_single)
+			in_double = !in_double;
+		if (!in_single && str[i] == '$' && str[i + 1]
+			&& (ft_isalnum(str[i + 1]) || str[i + 1] == '?'))
 		{
-			i++; // Skip $
-			j = i;
-			if (str[i] == '?')
+			var_start = &str[i + 1];
+			var_end = var_start;
+			if (*var_start == '?')
 			{
-				i++;
+				var_end++;
 				var_name = ft_strdup("?");
 			}
 			else
 			{
-				while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-					i++;
-				var_name = ndup(&str[j], i - j);
+				while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
+					var_end++;
+				var_name = ft_substr(var_start, 0, var_end - var_start);
 			}
 			if (ft_strcmp(var_name, "?") == 0)
 				var_value = ft_itoa(g_signal.ret);
@@ -51,19 +51,18 @@ char	*simple_expand_variable(char *str, char **env)
 				var_value = get_env_variable_value(env, var_name);
 			if (var_value)
 			{
-				j = 0;
+				int j = 0;
 				while (var_value[j] && result_pos < result_len - 1)
 					result[result_pos++] = var_value[j++];
 				free(var_value);
 			}
 			free(var_name);
+			i = var_end - str;
+			continue ;
 		}
-		else
-		{
-			if (result_pos < result_len - 1)
-				result[result_pos++] = str[i];
-			i++;
-		}
+		if (result_pos < result_len - 1)
+			result[result_pos++] = str[i];
+		i++;
 	}
 	result[result_pos] = '\0';
 	return (result);

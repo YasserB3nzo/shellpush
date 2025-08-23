@@ -160,7 +160,6 @@ char					*increment_s1(char *s1);
 char					**ft_split_str(char *s1);
 char					**array_copy(char **str);
 void					free_array(char **array);
-void					print_array(char **str);
 void					print_value(char *str);
 
 /* Counting and size utilities */
@@ -274,7 +273,6 @@ void					set_env_if_plus(t_env *env_node, char *export_value);
 /* Utility functions */
 void					swap(char **s1, char **s2);
 void					ft_clear(t_data *data);
-void					printlist(void *tmp);
 int						copy_string_to_buffer(char *line, char *ptr, int pos);
 
 #endif

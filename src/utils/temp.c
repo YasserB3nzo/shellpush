@@ -1,31 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   temp.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/22 15:11:15 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/22 15:11:17 by ybenzidi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/minishell.h"
-
-void	print_array(char **str)
-{
-	if (!str || !*str)
-		return ;
-	printf(":");
-	printf("%s", *str);
-	str++;
-	while (str && *str)
-	{
-		printf(" <-> %s", *str);
-		str++;
-	}
-	printf(":\n");
-}
 
 void	ft_puterror_fd(char *str1, char *str2)
 {
