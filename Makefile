@@ -2,7 +2,9 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -ggdb3 -g3 -fsanitize=address -fno-omit-frame-pointer
+CFLAGS = -Wall -Wextra -Werror
+DEBUG_FLAGS = -ggdb3 -g3 -fsanitize=address -fno-omit-frame-pointer
+VALGRIND_FLAGS = -Wall -Wextra -Werror -g
 
 SRCS = 	Libft/ft_split.c\
 		Libft/ft_putstr_fd.c\
@@ -36,6 +38,7 @@ SRCS = 	Libft/ft_split.c\
 		src/parsing/expander.c\
 		src/parsing/heredoc.c\
 		src/execution/exec.c\
+		src/execution/exec_utils.c\
 		src/execution/signals.c\
 		src/builtins/cd.c\
 		src/builtins/echo.c\
@@ -55,6 +58,8 @@ SRCS = 	Libft/ft_split.c\
 		src/utils/util8.c\
 		src/utils/util9.c\
 		src/utils/util10.c\
+		src/utils/util11.c\
+		src/utils/env_utils.c\
 		src/errors/shellerr.c\
 		src/errors/syserr.c\
 		src/utils/varproc.c\
@@ -66,6 +71,12 @@ AR  = ar rcs
 RM = rm -rf 
 
 all : $(NAME)
+
+debug: CFLAGS += $(DEBUG_FLAGS)
+debug: re
+
+valgrind: CFLAGS = $(VALGRIND_FLAGS)
+valgrind: re
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o minishell -lreadline

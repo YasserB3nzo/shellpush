@@ -6,76 +6,90 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 16:56:30 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/23 16:56:40 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:38:47 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*simple_expand_variable(char *str, char **env)
+static char	*handle_variable_expansion(char *str, int *i, char **env)
 {
-	char	*result;
 	char	*var_start;
 	char	*var_end;
 	char	*var_name;
 	char	*var_value;
-	int		i;
-	int		result_len;
-	int		result_pos;
-	int		in_single;
-	int		in_double;
-	int		j;
+
+	var_start = &str[*i + 1];
+	var_end = var_start;
+	if (*var_start == '?')
+	{
+		var_end++;
+		var_name = ft_strdup("?");
+	}
+	else
+	{
+		while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
+			var_end++;
+		var_name = ft_substr(var_start, 0, var_end - var_start);
+	}
+	if (ft_strcmp(var_name, "?") == 0)
+		var_value = ft_itoa(g_signal.ret);
+	else
+		var_value = get_env_variable_value(env, var_name);
+	free(var_name);
+	*i = var_end - str;
+	return (var_value);
+}
+
+static int	handle_quotes_and_expansion(char *str, int *i, char **env,
+	t_expansion_data *data)
+{
+	static int	in_single = 0;
+	static int	in_double = 0;
+	char		*var_value;
+	int			j;
+
+	if (str[*i] == '\'' && !in_double)
+		in_single = !in_single;
+	else if (str[*i] == '"' && !in_single)
+		in_double = !in_double;
+	if (!in_single && str[*i] == '$' && str[*i + 1]
+		&& (ft_isalnum(str[*i + 1]) || str[*i + 1] == '?'))
+	{
+		var_value = handle_variable_expansion(str, i, env);
+		if (var_value)
+		{
+			j = 0;
+			while (var_value[j])
+				data->result[(*data->result_pos)++] = var_value[j++];
+			free(var_value);
+		}
+		return (1);
+	}
+	return (0);
+}
+
+char	*simple_expand_variable(char *str, char **env)
+{
+	char				*result;
+	int					i;
+	int					result_pos;
+	t_expansion_data	exp_data;
 
 	if (!str || !env)
 		return (str);
-	result_len = ft_strlen(str) + 1000;
-	result = malloc(result_len);
+	result = malloc(ft_strlen(str) + 1000);
 	if (!result)
 		return (str);
 	result_pos = 0;
 	i = 0;
-	in_single = 0;
-	in_double = 0;
+	exp_data.result = result;
+	exp_data.result_pos = &result_pos;
 	while (str[i])
 	{
-		if (str[i] == '\'' && !in_double)
-			in_single = !in_single;
-		else if (str[i] == '"' && !in_single)
-			in_double = !in_double;
-		if (!in_single && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
-				|| str[i + 1] == '?'))
-		{
-			var_start = &str[i + 1];
-			var_end = var_start;
-			if (*var_start == '?')
-			{
-				var_end++;
-				var_name = ft_strdup("?");
-			}
-			else
-			{
-				while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
-					var_end++;
-				var_name = ft_substr(var_start, 0, var_end - var_start);
-			}
-			if (ft_strcmp(var_name, "?") == 0)
-				var_value = ft_itoa(g_signal.ret);
-			else
-				var_value = get_env_variable_value(env, var_name);
-			if (var_value)
-			{
-				j = 0;
-				while (var_value[j] && result_pos < result_len - 1)
-					result[result_pos++] = var_value[j++];
-				free(var_value);
-			}
-			free(var_name);
-			i = var_end - str;
+		if (handle_quotes_and_expansion(str, &i, env, &exp_data))
 			continue ;
-		}
-		if (result_pos < result_len - 1)
-			result[result_pos++] = str[i];
-		i++;
+		result[result_pos++] = str[i++];
 	}
 	result[result_pos] = '\0';
 	return (result);
@@ -115,63 +129,4 @@ int	copy_string_to_buffer(char *line, char *ptr, int pos)
 		}
 	}
 	return (tpos);
-}
-
-void	escape_dollars_in_single_quotes(char *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		if (cmd[i] == 34)
-			i = check_double(cmd, i);
-		else if (cmd[i] == 39)
-		{
-			i++;
-			while (cmd[i] && cmd[i] != 39)
-			{
-				if (cmd[i] == '$')
-					cmd[i] = '1';
-				i++;
-			}
-			if (cmd[i] == 39)
-				i++;
-		}
-		else
-			i++;
-	}
-}
-
-void	init_line_data(t_line *line_data, char **lines, char **vars, char *cmd)
-{
-	line_data->i = 0;
-	line_data->k = 0;
-	line_data->size = 0;
-	line_data->pos = 0;
-	line_data->line = malloc(sizeof(char) * (calculate_total_string_length(vars,
-					lines) + 1));
-	escape_dollars_in_single_quotes(cmd);
-}
-
-char	*get_final_line(char **lines, char **vars, char *cmd, t_line *data)
-{
-	init_line_data(data, lines, vars, cmd);
-	while (cmd[data->size])
-	{
-		if ((cmd[data->size] != '$' || cmd[data->size + 1] != '$')
-			&& lines[data->k])
-		{
-			data->pos = copy_string_to_buffer(data->line, lines[data->k++],
-					data->pos);
-			while (cmd[data->size] && cmd[data->size] != '$')
-				data->size++;
-		}
-		else if (cmd[data->size] == '$' && vars[data->i]
-			&& vars[data->i][0] != '\0')
-			process_variable_expansion(cmd, vars, data);
-		else if (cmd[data->size])
-			data->size++;
-	}
-	return (data->line[data->pos] = '\0', data->line);
 }

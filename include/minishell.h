@@ -6,7 +6,7 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 18:12:46 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/23 17:00:04 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:38:47 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,12 @@ typedef struct s_line
 	int					size;
 }						t_line;
 
+typedef struct s_expansion_data
+{
+	char				*result;
+	int					*result_pos;
+}						t_expansion_data;
+
 t_cmds					*lstlast(t_cmds *command_list);
 void					lstclear(t_cmds **command_list);
 t_cmds					*lstnew(char *cmd, t_cmds *stack, char **str);
@@ -166,6 +172,8 @@ bool					check_next(char *str);
 bool					check_next_for_both(char *str);
 bool					check_back_for_heredoc(char *str, int index);
 bool					is_it_inside(char *str);
+bool					change_underscore(t_data *data, t_command *command,
+							char *str, int i);
 int						is_numeric(char *str);
 int						count_dollar_signs(char *str);
 int						count_dollar_variables(char *s1);

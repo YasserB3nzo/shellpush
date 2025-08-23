@@ -6,7 +6,7 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 18:13:59 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/22 15:07:53 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:26:57 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,4 @@ int	check_quotation(char *str)
 		}
 	}
 	return (0);
-}
-
-bool	check_eq(char *str)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] == '=')
-			j++;
-		i++;
-	}
-	if (j == 0)
-		return (true);
-	return (false);
 }

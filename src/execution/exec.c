@@ -6,46 +6,18 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 15:42:23 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/22 15:08:01 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:38:47 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-bool	change_underscore(t_data *data, t_command *command, char *str, int i)
+static void	handle_unset_command(t_data *data, t_command *command)
 {
-	t_env	*env_node;
-
-	if (!command->cmd || !command->cmd[0])
-		return (false);
-	if (ft_strcmp(command->cmd[0], "cd") == 0 || ft_strcmp(command->cmd[0],
-			"pwd") == 0 || ft_strcmp(command->cmd[0], "env") == 0
-		|| ft_strcmp(command->cmd[0], "export") == 0
-		|| ft_strcmp(command->cmd[0], "unset") == 0
-		|| ft_strcmp(command->cmd[0], "exit") == 0 || ft_strcmp(command->cmd[0],
-			"echo") == 0)
-		return (false);
-	while (command->cmd[i])
-		i++;
-	str = command->cmd[--i];
-	if (!str || *str == '\n')
-		return (false);
-	env_node = find_env_variable(data->list_env, "_");
-	if (env_node)
-	{
-		free(env_node->var_name);
-		env_node->var_name = ft_strjoin("_=", str);
-	}
-	else
-	{
-		env_node = env_new(data->list_env, ft_strjoin("_=", str));
-		data->list_env = env_last(data->list_env);
-		if (data->list_env)
-			data->list_env->next = env_node;
-		else
-			data->list_env = env_node;
-	}
-	return (true);
+	data->list_env = unset_env(data->list_env, command->cmd, data);
+	if (data->env)
+		free_array(data->env);
+	data->env = linked_list_to_array(data->list_env);
 }
 
 int	run_builtins(int cmd_id, t_command *command, t_data *data, int flag)
@@ -62,14 +34,7 @@ int	run_builtins(int cmd_id, t_command *command, t_data *data, int flag)
 	else if (cmd_id == 4)
 		export(env_list, command->cmd, '-', 1);
 	else if (cmd_id == 5)
-	{
-		data->list_env = unset_env(env_list, command->cmd, data);
-		if (data->env)
-		{
-			free_array(data->env);
-		}
-		data->env = linked_list_to_array(data->list_env);
-	}
+		handle_unset_command(data, command);
 	else if (cmd_id == 6)
 		exit_myminishell(command->cmd, flag);
 	else if (cmd_id == 7)
