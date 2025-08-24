@@ -17,11 +17,12 @@ void	ft_free(char **ptr, int i)
 	int	j;
 
 	j = 0;
-	if (ptr[i] != NULL)
-		return ;
-	while (j < i)
-		free(ptr[j++]);
-	free(ptr);
+	if (ptr[i] == NULL)
+	{
+		while (j < i)
+			free(ptr[j++]);
+		free(ptr);
+	}
 }
 
 int	inside(char const *s)

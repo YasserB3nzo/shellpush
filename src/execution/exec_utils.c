@@ -25,16 +25,25 @@ static bool	is_builtin_command(char *cmd)
 static void	update_underscore_env(t_data *data, char *str)
 {
 	t_env	*env_node;
+	char	*new_var;
 
+	new_var = ft_strjoin("_=", str);
+	if (!new_var)
+		return ;
 	env_node = find_env_variable(data->list_env, "_");
 	if (env_node)
 	{
 		free(env_node->var_name);
-		env_node->var_name = ft_strjoin("_=", str);
+		env_node->var_name = new_var;
 	}
 	else
 	{
-		env_node = env_new(data->list_env, ft_strjoin("_=", str));
+		env_node = env_new(data->list_env, new_var);
+		if (!env_node)
+		{
+			free(new_var);
+			return ;
+		}
 		data->list_env = env_last(data->list_env);
 		if (data->list_env)
 			data->list_env->next = env_node;

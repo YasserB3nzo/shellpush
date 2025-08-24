@@ -73,9 +73,16 @@ char	*get_my_path(t_env *list, char **command_args, bool flag, int i)
 	if (!path_value)
 		return (NULL);
 	path_array = ft_split(path_value, ':');
+	if (!path_array)
+		return (NULL);
 	while (path_array[i])
 	{
 		command_path = ft_strjoin3(path_array[i], '/', command_args[0]);
+		if (!command_path)
+		{
+			free_array(path_array);
+			return (NULL);
+		}
 		if (access(command_path, X_OK) == 0)
 		{
 			search_path = command_path;

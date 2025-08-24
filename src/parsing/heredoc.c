@@ -38,6 +38,7 @@ void	check_quot_and_filename(bool *flag, char **filename, char *str)
 	static int	i;
 	char		*tmp1;
 
+	i++;
 	if (check_quot(str) != 0)
 		*flag = false;
 	tmp1 = ft_itoa(i);
@@ -59,8 +60,11 @@ void	child(char *line, t_cmds *cmds, bool flag)
 	{
 		if (!line && print_error(k, cmds->cmd[0]) == 0)
 			break ;
-		else if (ft_strcmp_for_heredoc(line, cmds->cmd[0]) == 0)
+		else if (line && ft_strcmp_for_heredoc(line, cmds->cmd[0]) == 0)
+		{
+			free(line);
 			break ;
+		}
 		k++;
 		if (flag == true)
 			line = expand_variable(line, cmds->data);
@@ -70,6 +74,9 @@ void	child(char *line, t_cmds *cmds, bool flag)
 		line = readline(">");
 	}
 	close(fd);
+	senv_clear(&cmds->data->list_env);
+	if (cmds->data->env)
+		free_array(cmds->data->env);
 	exit(0);
 }
 
@@ -85,7 +92,12 @@ int	open_heredoc(t_cmds *cmds, int pid, int status, bool flag)
 	if (pid == 0)
 		child(line, cmds, flag);
 	else if (pid < 0)
+	{
 		ft_putstr_fd("minishell: fork fail while creating the HereDoc\n", 2);
+		free(line);
+		close(fd0);
+		return (-1);
+	}
 	waitpid(pid, &status, 0);
 	g_signal.ff = 0;
 	dup2(fd0, 0);
