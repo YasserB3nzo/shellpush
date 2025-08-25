@@ -6,7 +6,7 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 18:12:46 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/23 18:38:47 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/25 00:37:08 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_expansion_data
 	int					*result_pos;
 }						t_expansion_data;
 
+/* list helpers */
 t_cmds					*lstlast(t_cmds *command_list);
 void					lstclear(t_cmds **command_list);
 t_cmds					*lstnew(char *cmd, t_cmds *stack, char **str);
@@ -189,7 +190,7 @@ void					process_variable_expansion(char *cmd, char **vars,
 							t_line *data);
 void					get_list(char **cmd, int size, t_cmds **lst,
 							t_data *data);
-void					init_tokens(t_cmds *cmds, int token_size, t_cmds *lst);
+int						init_tokens(t_cmds *cmds, int token_size, t_cmds *lst);
 void					parsing(t_data *data, t_cmds *lst, t_command *commands,
 							int i);
 void					non_token(t_cmds *lst);
@@ -208,9 +209,15 @@ char					**get_key_and_value(char *str, char **ptr, int i,
 							int j);
 t_cmds					*copy_node(char **cmd, t_token token, bool flag);
 t_cmds					*copy_single_node(t_cmds *curr, int *i);
-t_cmds					*add_head_to_new_list(t_cmds *head, t_cmds *new_head);
 t_cmds					*copy_list(t_cmds *curr, char **command, int i);
 t_cmds					*merge_lists(t_cmds *list1, t_cmds *list2);
+int						heredoc(t_cmds *head, t_cmds *curr, int i,
+							int heredoc_num);
+int						print_error(int k, char *str);
+void					check_quot_and_filename(bool *flag, char **filename,
+							char *str);
+void					signal_herd(int pid);
+void					read_loop(int fd, char *line, t_cmds *cmds, bool flag);
 int						check_for_pipe(t_cmds *cmds);
 int						check_for_in_out_put(t_cmds *cmds);
 int						check_for_append_heredoc(t_cmds *cmds);
@@ -256,5 +263,30 @@ void					set_env_if_plus(t_env *env_node, char *export_value);
 void					swap(char **s1, char **s2);
 void					ft_clear(t_data *data);
 int						copy_string_to_buffer(char *line, char *ptr, int pos);
+int						check_invalid_lt_sequences(char *line);
+void					exec_external(char **com, t_command *command,
+							t_data *data, char *path);
+int						process_tokens_loop(t_cmds *curr, int i);
+/* helpers after split */
+void					token1(t_cmds *cmds, char c);
+void					token2(t_cmds *cmds, int token_type);
+int						check_all_lt(t_cmds *cmds, int token_size);
+void					assign_simple_tokens(t_cmds *cmds, int token_size);
+void					assign_cmd_token(t_cmds *cmds);
+void					execute_command_part_one(char **com, t_command *command,
+							t_data *data, char *path);
+void					execute_command_part_two(t_command *command,
+							t_data *data);
+void					execute_command_part_three(char **com,
+							t_command *command, t_data *data, char *path);
+int						print_all_lt_error(int token_size);
+bool					is_delimiter(char *line, t_cmds *cmds);
+void					write_line(int fd, char *line, t_cmds *cmds, bool flag);
+void					child(char *line, t_cmds *cmds, bool flag);
+int						prepare_and_fork(t_cmds *cmds, bool *flag, char **line,
+							int *fd0);
+int						fork_and_wait(int pid, int status, int fd0, char *line);
+void					print_no_exec_error(char **com, t_data *data);
+bool					check_file_exists_no_exec(char *cmd);
 
 #endif

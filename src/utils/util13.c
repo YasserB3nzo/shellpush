@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse1.c                                           :+:      :+:    :+:   */
+/*   util13.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/24 21:16:14 by ybenzidi          #+#    #+#             */
+/*   Created: 2025/08/24 23:07:52 by ybenzidi          #+#    #+#             */
 /*   Updated: 2025/08/24 22:39:29 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	init_tokens(t_cmds *cmds, int token_size, t_cmds *lst)
+void	exec_external(char **com, t_command *command, t_data *data, char *path)
 {
-	int	status;
+	struct stat	stats;
 
-	while (cmds)
+	(void)command;
+	if (signal(SIGQUIT, printsignalsc) != SIG_ERR)
+		g_signal.ret = 131;
+	execve(path, com, data->env);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(com[0], 2);
+	ft_putstr_fd(": ", 2);
+	if (stat(path, &stats) == 0 && S_ISDIR(stats.st_mode))
 	{
-		token_size = ft_strlen(cmds->cmd[0]);
-		status = 0;
-		if (token_size >= 3 && cmds->cmd[0][0] == '<')
-			status = check_all_lt(cmds, token_size);
-		else
-			assign_simple_tokens(cmds, token_size);
-		assign_cmd_token(cmds);
-		if (status == 2)
-			return (2);
-		cmds = cmds->next;
+		ft_putendl_fd("Is a directory", 2);
+		senv_clear(&data->list_env);
+		free_array(data->env);
+		exit(126);
 	}
-	non_token(lst);
-	return (0);
+	ft_putendl_fd(strerror(errno), 2);
+	senv_clear(&data->list_env);
+	free_array(data->env);
+	if (errno == EACCES)
+		exit(126);
+	else
+		exit(127);
 }

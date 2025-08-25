@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse1.c                                           :+:      :+:    :+:   */
+/*   util12.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/24 21:16:14 by ybenzidi          #+#    #+#             */
+/*   Created: 2025/08/24 23:07:26 by ybenzidi          #+#    #+#             */
 /*   Updated: 2025/08/24 22:39:29 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	init_tokens(t_cmds *cmds, int token_size, t_cmds *lst)
-{
-	int	status;
+// isolated from util10.c to reduce function count
 
-	while (cmds)
-	{
-		token_size = ft_strlen(cmds->cmd[0]);
-		status = 0;
-		if (token_size >= 3 && cmds->cmd[0][0] == '<')
-			status = check_all_lt(cmds, token_size);
-		else
-			assign_simple_tokens(cmds, token_size);
-		assign_cmd_token(cmds);
-		if (status == 2)
-			return (2);
-		cmds = cmds->next;
-	}
-	non_token(lst);
-	return (0);
+t_cmds	*merge_lists(t_cmds *list1, t_cmds *list2)
+{
+	t_cmds	*current;
+	t_cmds	*pipe;
+
+	if (!list1)
+		return (list2);
+	if (!list2)
+		return (list1);
+	pipe = copy_node(get_name("|"), Pipe, true);
+	current = list1;
+	while (current->next)
+		current = current->next;
+	current->next = pipe;
+	pipe->prev = current;
+	pipe->next = list2;
+	list2->prev = pipe;
+	return (list1);
 }

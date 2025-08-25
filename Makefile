@@ -28,6 +28,8 @@ SRCS = 	Libft/ft_split.c\
 		minishell.c\
 		src/parsing/parser.c\
 		src/parsing/parse1.c\
+		src/parsing/parse1_tokens.c\
+		src/parsing/parse1_errors.c\
 		src/parsing/parse2.c\
 		src/parsing/parse3.c\
 		src/parsing/parse4.c\
@@ -37,6 +39,9 @@ SRCS = 	Libft/ft_split.c\
 		src/parsing/parse8.c\
 		src/parsing/expander.c\
 		src/parsing/heredoc.c\
+		src/parsing/heredoc_utils.c\
+		src/parsing/heredoc_helpers.c\
+		src/parsing/heredoc_fork.c\
 		src/execution/exec.c\
 		src/execution/exec_utils.c\
 		src/execution/signals.c\
@@ -59,9 +64,17 @@ SRCS = 	Libft/ft_split.c\
 		src/utils/util9.c\
 		src/utils/util10.c\
 		src/utils/util11.c\
+		src/utils/util12.c\
+		src/utils/util13.c\
+		src/utils/util14.c\
+		src/utils/util15.c\
+		src/utils/util16.c\
+		src/utils/util17.c\
 		src/utils/env_utils.c\
 		src/errors/shellerr.c\
+		src/errors/shellerr_utils.c\
 		src/errors/syserr.c\
+		src/errors/addional.c\
 		src/utils/varproc.c\
 
 OBJ = $(SRCS:.c=.o)

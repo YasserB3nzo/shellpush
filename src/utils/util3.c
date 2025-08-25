@@ -31,7 +31,7 @@ void	ft_put2str_fd(char *s1, char *s2, int fd)
 
 int	errormsg(char *str)
 {
-	ft_put2str_fd("minishel: syntax error near unexpected token", str, 2);
+	ft_put2str_fd("minishell: syntax error near unexpected token", str, 2);
 	return (2);
 }
 

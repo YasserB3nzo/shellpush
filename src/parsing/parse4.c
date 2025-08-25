@@ -6,7 +6,7 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 15:43:34 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/22 15:08:42 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:53:55 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	get_list(char **cmd, int size, t_cmds **lst, t_data *data)
 	int		i;
 
 	i = 0;
-	if (cmd[0] == NULL)
+	if (cmd[0] == NULL || (cmd[0] && cmd[0][0] == '\0'))
 	{
-		*lst = lstnew("\n", *lst, NULL);
+		*lst = NULL;
 		return ;
 	}
 	*lst = lstnew(cmd[i++], *lst, NULL);

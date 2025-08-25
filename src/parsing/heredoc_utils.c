@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse1.c                                           :+:      :+:    :+:   */
+/*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/24 21:16:14 by ybenzidi          #+#    #+#             */
+/*   Created: 2025/08/25 00:16:27 by ybenzidi          #+#    #+#             */
 /*   Updated: 2025/08/24 22:39:29 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	init_tokens(t_cmds *cmds, int token_size, t_cmds *lst)
+int	ft_strcmp_for_heredoc(char *s1, char *s2)
 {
-	int	status;
+	char	*str;
+	int		k;
+	int		i;
 
-	while (cmds)
-	{
-		token_size = ft_strlen(cmds->cmd[0]);
-		status = 0;
-		if (token_size >= 3 && cmds->cmd[0][0] == '<')
-			status = check_all_lt(cmds, token_size);
-		else
-			assign_simple_tokens(cmds, token_size);
-		assign_cmd_token(cmds);
-		if (status == 2)
-			return (2);
-		cmds = cmds->next;
-	}
-	non_token(lst);
-	return (0);
+	i = 0;
+	if (!s1 || !s2)
+		return (0);
+	str = get_string(ft_strdup(s2), 0, 0, get_size(s2));
+	while (s1[i] == str[i] && s1[i] != '\0' && str[i] != '\0')
+		i++;
+	k = s1[i] - str[i];
+	free(str);
+	return (k);
 }

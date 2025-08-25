@@ -42,7 +42,7 @@ static char	*handle_variable_expansion(char *str, int *i, char **env)
 }
 
 static int	handle_quotes_and_expansion(char *str, int *i, char **env,
-	t_expansion_data *data)
+		t_expansion_data *data)
 {
 	static int	in_single = 0;
 	static int	in_double = 0;
@@ -53,8 +53,8 @@ static int	handle_quotes_and_expansion(char *str, int *i, char **env,
 		in_single = !in_single;
 	else if (str[*i] == '"' && !in_single)
 		in_double = !in_double;
-	if (!in_single && str[*i] == '$' && str[*i + 1]
-		&& (ft_isalnum(str[*i + 1]) || str[*i + 1] == '?'))
+	if (!in_single && str[*i] == '$' && str[*i + 1] && (ft_isalnum(str[*i + 1])
+			|| str[*i + 1] == '?'))
 	{
 		var_value = handle_variable_expansion(str, i, env);
 		if (var_value)

@@ -6,7 +6,7 @@
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 15:43:47 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/23 18:38:47 by ybenzidi         ###   ########.fr       */
+/*   Updated: 2025/08/25 00:41:43 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,7 @@ t_command	*command_new(t_command *lst)
 	n_node->outfile = NULL;
 	n_node->next = NULL;
 	if (lst == NULL)
-	{
 		n_node->prev = NULL;
-	}
 	else
 	{
 		last_node = command_last(lst);

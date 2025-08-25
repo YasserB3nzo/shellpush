@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 15:44:25 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/22 15:09:06 by ybenzidi         ###   ########.fr       */
+/*   Created: 2025/08/24 21:15:58 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/24 22:39:29 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	**get_cmds_done(t_data *data, char **cmds)
 	return (cmds);
 }
 
-void	parsing(t_data *data, t_cmds *lst, t_command *commands, int i)
+static int	prepare_line_and_tokens(t_data *data, t_cmds **lst, int i)
 {
 	data->cmds = get_cmds_done(data, data->cmds);
 	while (data->cmds[++i])
@@ -57,23 +57,45 @@ void	parsing(t_data *data, t_cmds *lst, t_command *commands, int i)
 		if (cmdcheck(data->cmds[i]) == 0)
 			data->cmds[i] = rm_spaces(data->cmds[i]);
 	}
-	get_list(data->cmds, i, &lst, data);
-	init_tokens(lst, 0, lst);
+	get_list(data->cmds, i, lst, data);
+	g_signal.ret = init_tokens(*lst, 0, *lst);
+	data->lst = *lst;
+	if (g_signal.ret == 0)
+		g_signal.ret = errors_managment(data, 0);
+	return (g_signal.ret);
+}
+
+static void	finalize_parsing(t_data *data, t_cmds *lst, t_command *commands)
+{
+	lst = last_update_in_the_list(lst, lst, NULL, NULL);
+	lstclear(&data->lst);
 	data->lst = lst;
-	g_signal.ret = errors_managment(data, 0);
+	commands = get_commands(lst);
+	data->lst = lst;
+	data->list = commands;
+	g_signal.ret = executing(data);
+	commands_clear(&commands);
+	ft_clear(data);
+}
+
+void	parsing(t_data *data, t_cmds *lst, t_command *commands, int i)
+{
+	g_signal.ret = check_invalid_lt_sequences(data->line);
+	if (g_signal.ret != 0)
+	{
+		data->cmds = NULL;
+		data->lst = NULL;
+		return ;
+	}
+	if (prepare_line_and_tokens(data, &lst, i) != 0)
+	{
+		remove_quotes(lst);
+		ft_clear(data);
+		return ;
+	}
 	remove_quotes(lst);
 	if (g_signal.ret == 0 && g_signal.sig != -1)
-	{
-		lst = last_update_in_the_list(lst, lst, NULL, NULL);
-		lstclear(&data->lst);
-		data->lst = lst;
-		commands = get_commands(lst);
-		data->lst = lst;
-		data->list = commands;
-		g_signal.ret = executing(data);
-		commands_clear(&commands);
-		ft_clear(data);
-	}
+		finalize_parsing(data, lst, commands);
 	else
 		ft_clear(data);
 }

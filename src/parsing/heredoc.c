@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybenzidi <ybenzidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 15:42:56 by ybenzidi          #+#    #+#             */
-/*   Updated: 2025/08/22 15:08:21 by ybenzidi         ###   ########.fr       */
+/*   Created: 2025/08/24 21:16:35 by ybenzidi          #+#    #+#             */
+/*   Updated: 2025/08/24 22:39:29 by ybenzidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,49 +46,12 @@ void	check_quot_and_filename(bool *flag, char **filename, char *str)
 	free(tmp1);
 }
 
-void	child(char *line, t_cmds *cmds, bool flag)
-{
-	int	k;
-	int	fd;
-
-	fd = open(line, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	free(line);
-	signal(SIGINT, signal_herd);
-	line = readline(">");
-	k = 1;
-	while (1)
-	{
-		if (!line && print_error(k, cmds->cmd[0]) == 0)
-			break ;
-		else if (line && ft_strcmp_for_heredoc(line, cmds->cmd[0]) == 0)
-		{
-			free(line);
-			break ;
-		}
-		k++;
-		if (flag == true)
-			line = expand_variable(line, cmds->data);
-		ft_putstr_fd(line, fd);
-		ft_putchar_fd('\n', fd);
-		free(line);
-		line = readline(">");
-	}
-	close(fd);
-	senv_clear(&cmds->data->list_env);
-	if (cmds->data->env)
-		free_array(cmds->data->env);
-	exit(0);
-}
-
 int	open_heredoc(t_cmds *cmds, int pid, int status, bool flag)
 {
 	char	*line;
 	int		fd0;
 
-	fd0 = dup(0);
-	check_quot_and_filename(&flag, &line, cmds->cmd[0]);
-	g_signal.ff = 1;
-	pid = ft_fork();
+	pid = prepare_and_fork(cmds, &flag, &line, &fd0);
 	if (pid == 0)
 		child(line, cmds, flag);
 	else if (pid < 0)
@@ -98,11 +61,7 @@ int	open_heredoc(t_cmds *cmds, int pid, int status, bool flag)
 		close(fd0);
 		return (-1);
 	}
-	waitpid(pid, &status, 0);
-	g_signal.ff = 0;
-	dup2(fd0, 0);
-	close(fd0);
-	free(cmds->cmd[0]);
+	status = fork_and_wait(pid, status, fd0, cmds->cmd[0]);
 	cmds->cmd[0] = line;
 	cmds->prev->token = Input;
 	cmds->token = Infile;
